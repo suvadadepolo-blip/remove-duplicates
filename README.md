@@ -2,7 +2,11 @@
 
 A focused static tool for removing duplicates from lines, lists, pasted spreadsheet data, CSV files, and local XLSX workbooks, deployed as a Cloudflare Worker with Static Assets.
 
-Source code: https://github.com/describesomeone/remove-duplicates
+Links:
+
+- Website: [RemoveDuplicates.org](https://removeduplicates.org/)
+- Excel tool: [Remove duplicates from Excel online](https://removeduplicates.org/excel)
+- Source code: [describesomeone/remove-duplicates](https://github.com/describesomeone/remove-duplicates)
 
 License: MIT
 
@@ -10,7 +14,7 @@ License: MIT
 
 - Line and table-aware deduplication runs in browser memory; larger inputs are streamed to a same-origin Web Worker in responsive chunks.
 - Excel and Google Sheets rows can be pasted as TSV, while quoted CSV/TSV files can be opened up to the same 5 MB local limit.
-- `/excel` accepts only macro-free `.xlsx` files, compares an entire row or a stable combination of selected columns, and creates the cleaned workbook in a dedicated Module Worker.
+- [The Excel tool](https://removeduplicates.org/excel) accepts only macro-free `.xlsx` files, compares an entire row or a stable combination of selected columns, and creates the cleaned workbook in a dedicated Module Worker.
 - XLSX package limits are 10 MiB compressed, 2,000 ZIP entries, 100 MiB declared expanded data, 500,000 workbook cells, and 250,000 cells in the selected sheet. Formula row shifts and intersecting merged ranges are blocked.
 - SheetJS CE 0.20.3 is pinned under `public/vendor/sheetjs-0.20.3/` with its official source URLs, license, and SHA-256 receipt. It is lazy-loaded only after a valid XLSX passes local ZIP preflight and is never requested by the homepage.
 - The application does not upload or persist text or workbook contents a user opens.
