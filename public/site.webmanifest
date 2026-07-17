@@ -1,0 +1,24 @@
+{
+  "name": "RemoveDuplicates.org",
+  "short_name": "Remove Duplicates",
+  "description": "Remove duplicates from lines, lists, spreadsheet data, and CSV files privately in your browser.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#eef1ed",
+  "theme_color": "#eef1ed",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#eef1ed">
+    <meta name="color-scheme" content="light">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <title>Remove Duplicates from Excel Online — Free XLSX Tool</title>
+    <meta name="description" content="Remove duplicate rows from an Excel file. Pick the columns that define duplicates and download a cleaned XLSX—free, private, entirely in your browser.">
+    <link rel="canonical" href="https://removeduplicates.org/excel">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="RemoveDuplicates.org">
+    <meta property="og:title" content="Remove Duplicates from Excel Online — Free XLSX Tool">
+    <meta property="og:description" content="Choose duplicate-defining columns and download a cleaned XLSX. Your workbook stays in your browser.">
+    <meta property="og:url" content="https://removeduplicates.org/excel">
+    <meta property="og:image" content="https://removeduplicates.org/og-image-excel.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Excel workbook rows becoming a shorter list of unique rows">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Remove Duplicates from Excel Online — Free XLSX Tool">
+    <meta name="twitter:description" content="Choose duplicate-defining columns and download a cleaned XLSX. Your workbook stays in your browser.">
+    <meta name="twitter:image" content="https://removeduplicates.org/og-image-excel.png">
+    <meta name="twitter:image:alt" content="Excel workbook rows becoming a shorter list of unique rows">
+    <link rel="stylesheet" href="/styles.css?v=20260716.2">
+    <link rel="stylesheet" href="/excel.css?v=20260716.2">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "@id": "https://removeduplicates.org/excel#application",
+            "url": "https://removeduplicates.org/excel",
+            "name": "Remove Duplicates from Excel Online",
+            "description": "A free browser-based tool for removing duplicate rows from XLSX workbooks by entire row or selected columns.",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires a modern browser with JavaScript, Web Workers, and local file access enabled.",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "Remove duplicate rows from XLSX workbooks",
+              "Compare entire rows or one or several selected columns",
+              "Keep the first or last matching row in source order",
+              "Process and create the cleaned workbook entirely in the browser",
+              "Return the original workbook bytes when no rows need removal",
+              "Block unsafe formula and merged-row changes"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://removeduplicates.org/excel#faq-data",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is my Excel file uploaded or stored?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Your browser reads and processes the selected workbook in memory. RemoveDuplicates.org does not upload, store, or send its contents to a server."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Which Excel file formats are supported?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Only .xlsx workbooks are supported. Legacy .xls, macro-enabled .xlsm, OpenDocument .ods, and Apple Numbers files must be converted to a macro-free .xlsx file first."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I remove duplicates using one or several columns?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Compare entire rows or select one or several columns. Multi-column comparisons always follow worksheet column order, regardless of the order in which you select them."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What happens to headers, formulas, dates, and formatting?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The first row is treated as a header by default, and dates and values are compared by saved display text. If any row would be removed from a workbook containing formulas, the tool stops to avoid unsafe formula shifts. Advanced features such as styles, charts, validation, and named ranges are listed as risks and require confirmation before a rewrite."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does the tool change my original workbook?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. The original file is never overwritten. The tool creates a separate download, and if no rows need removal it returns the original workbook bytes unchanged."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why can a password-protected or macro-enabled workbook not be opened?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Encrypted workbooks cannot be read safely in this local tool, and macro-enabled files can contain executable code that this tool does not preserve or run. Save a password-free, macro-free .xlsx copy before processing."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body class="excel-page">
+    <a class="skip-link" href="#excel-tool">Skip to Excel tool</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="RemoveDuplicates.org home">
+          <svg class="brand-mark" viewBox="0 0 42 42" aria-hidden="true">
+            <path d="M8 9h21M8 16h26M8 23h18M8 30h23"></path>
+            <path class="brand-cut" d="m28 20 7 7m0-7-7 7"></path>
+          </svg>
+          <span class="brand-name">remove<b>duplicates</b><i>.org</i></span>
+        </a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a href="/">Text tool</a>
+          <a href="/excel" aria-current="page">Excel tool</a>
+          <a href="#excel-faq">FAQ</a>
+          <a href="https://github.com/describesomeone/remove-duplicates">GitHub</a>
+        </nav>
+        <span class="local-badge"><i aria-hidden="true"></i> Runs in your browser</span>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="excel-tool-section" id="excel-tool" aria-labelledby="page-title">
+        <div class="excel-intro">
+          <div>
+            <p class="eyebrow">Local XLSX tool · No upload</p>
+            <h1 id="page-title">Remove duplicates from Excel files online.</h1>
+            <p class="excel-lede">Choose an XLSX file, select a worksheet and comparison columns, then download a cleaned copy. Your workbook never leaves this browser.</p>
+          </div>
+          <p class="excel-limit-note">Up to 10 MiB compressed · 500,000 workbook cells · 250,000 cells in the selected sheet</p>
+        </div>
+
+        <div class="excel-workspace" data-excel-workspace data-state="empty">
+          <section class="excel-file-panel" aria-labelledby="file-title">
+            <div class="excel-panel-heading">
+              <div>
+                <p class="panel-index" aria-hidden="true">01</p>
+                <h2 id="file-title">Choose a workbook</h2>
+              </div>
+              <button class="quiet-button" type="button" data-excel-clear hidden>Clear</button>
+            </div>
+
+            <div class="excel-drop-zone" data-excel-drop-zone>
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M13 5h15l8 8v30H13z"></path>
+                <path d="M28 5v9h8M19 25h10M24 20v10"></path>
+              </svg>
+              <strong>Drop your XLSX file here</strong>
+              <span>or</span>
+              <button class="file-button" type="button" data-excel-file-trigger>Choose Excel file</button>
+              <input class="visually-hidden" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-excel-file-input aria-label="Choose an XLSX workbook">
+              <small>Only .xlsx · processed locally</small>
+            </div>
+
+            <div class="excel-file-summary" data-excel-file-summary hidden>
+              <div class="file-identity">
+                <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M10 4h14l7 7v25H10z"></path><path d="M24 4v8h7M15 20h11M15 26h11"></path></svg>
+                <div>
+                  <strong data-excel-file-name></strong>
+                  <span data-excel-file-size></span>
+                </div>
+              </div>
+              <label class="control-label" for="excelSheet">Worksheet</label>
+              <select id="excelSheet" data-excel-sheet></select>
+              <dl class="sheet-measures" aria-label="Selected worksheet size">
+                <div><dt>Rows</dt><dd data-excel-sheet-rows>0</dd></div>
+                <div><dt>Columns</dt><dd data-excel-sheet-columns>0</dd></div>
+                <div><dt>Declared cells</dt><dd data-excel-sheet-cells>0</dd></div>
+              </dl>
+              <p class="inclusion-note">Hidden and filter-hidden rows are included in duplicate checks.</p>
+            </div>
+          </section>
+
+          <form class="excel-settings-panel" data-excel-settings hidden>
+            <div class="excel-panel-heading">
+              <div>
+                <p class="panel-index clean" aria-hidden="true">02</p>
+                <h2>Set the matching rules</h2>
+              </div>
+            </div>
+
+            <label class="check-row header-check">
+              <input type="checkbox" data-excel-header checked>
+              <span>First row contains headers</span>
+            </label>
+
+            <fieldset class="excel-fieldset">
+              <legend>Compare by</legend>
+              <label class="radio-row"><input type="radio" name="excel-compare-mode" value="row" checked> <span>Entire row</span></label>
+              <label class="radio-row"><input type="radio" name="excel-compare-mode" value="columns"> <span>Selected columns</span></label>
+              <div class="column-picker" data-excel-column-picker aria-label="Comparison columns">
+                <div class="column-actions">
+                  <span data-excel-column-count>0 columns selected</span>
+                  <button type="button" data-excel-select-all>Select all</button>
+                  <button type="button" data-excel-clear-columns>Clear</button>
+                </div>
+                <div class="column-list" data-excel-columns></div>
+              </div>
+            </fieldset>
+
+            <div class="excel-option-grid">
+              <fieldset class="excel-fieldset compact">
+                <legend>Keep</legend>
+                <label class="radio-row"><input type="radio" name="excel-keep" value="first" checked> <span>First occurrence</span></label>
+                <label class="radio-row"><input type="radio" name="excel-keep" value="last"> <span>Last occurrence</span></label>
+              </fieldset>
+              <fieldset class="excel-fieldset compact">
+                <legend>Comparison options</legend>
+                <label class="check-row"><input type="checkbox" data-excel-trim> <span>Trim surrounding spaces</span></label>
+                <label class="check-row"><input type="checkbox" data-excel-ignore-case> <span>Ignore uppercase/lowercase</span></label>
+                <label class="check-row"><input type="checkbox" data-excel-remove-empty> <span>Remove empty rows</span></label>
+              </fieldset>
+            </div>
+
+            <div class="formula-notice" data-excel-formula-notice hidden>
+              <strong>Formula safety check active.</strong>
+              <span>If any row would be removed, processing stops instead of shifting formulas.</span>
+            </div>
+
+            <section class="warning-panel" data-excel-warning-panel hidden aria-labelledby="warning-title">
+              <h3 id="warning-title">Review workbook feature risks</h3>
+              <ul data-excel-warnings></ul>
+              <label class="check-row warning-confirm">
+                <input type="checkbox" data-excel-confirm-warnings>
+                <span>I understand these features may change in a rewritten workbook.</span>
+              </label>
+            </section>
+
+            <button class="process-button excel-process" type="submit" data-excel-process>
+              <span>Remove duplicate rows</span>
+              <small>locally in this tab</small>
+            </button>
+          </form>
+        </div>
+
+        <div class="excel-feedback">
+          <p class="excel-status" role="status" aria-live="polite" data-excel-status>Choose an XLSX workbook to begin.</p>
+          <p class="excel-error" role="alert" tabindex="-1" data-excel-error hidden></p>
+        </div>
+
+        <section class="excel-result" data-excel-result hidden aria-labelledby="result-title">
+          <div>
+            <p class="eyebrow">Cleaned workbook ready</p>
+            <h2 id="result-title">Review the result before downloading.</h2>
+            <p data-excel-result-note></p>
+          </div>
+          <dl class="excel-stats" aria-label="Excel duplicate removal statistics">
+            <div><dt>Data rows</dt><dd data-excel-stat="total">0</dd></div>
+            <div><dt>Unique rows</dt><dd data-excel-stat="unique">0</dd></div>
+            <div><dt>Duplicates</dt><dd data-excel-stat="duplicates">0</dd></div>
+            <div><dt>Empty removed</dt><dd data-excel-stat="empty">0</dd></div>
+          </dl>
+          <a class="download-xlsx" href="/excel#excel-tool" data-excel-download>Download cleaned XLSX</a>
+        </section>
+      </section>
+
+      <section class="excel-explainer" aria-labelledby="how-excel-title">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-excel-title">Excel-style duplicate rules, with a stricter safety boundary.</h2>
+        <ol>
+          <li><strong>Choose locally.</strong> The browser checks the XLSX package before a dedicated Worker opens it.</li>
+          <li><strong>Define a duplicate.</strong> Compare the whole row or a stable combination of selected columns.</li>
+          <li><strong>Download a copy.</strong> The original stays untouched; unsafe formula and merge changes are blocked.</li>
+        </ol>
+      </section>
+
+      <section class="faq-section excel-faq" id="excel-faq" aria-labelledby="faq-title">
+        <p class="eyebrow">Questions, answered</p>
+        <h2 id="faq-title">Before you clean an XLSX workbook.</h2>
+        <div class="faq-list">
+          <details>
+            <summary>Is my Excel file uploaded or stored?<span aria-hidden="true"></span></summary>
+            <p>No. Your browser reads and processes the selected workbook in memory. RemoveDuplicates.org does not upload, store, or send its contents to a server.</p>
+          </details>
+          <details>
+            <summary>Which Excel file formats are supported?<span aria-hidden="true"></span></summary>
+            <p>Only .xlsx workbooks are supported. Legacy .xls, macro-enabled .xlsm, OpenDocument .ods, and Apple Numbers files must be converted to a macro-free .xlsx file first.</p>
+          </details>
+          <details>
+            <summary>Can I remove duplicates using one or several columns?<span aria-hidden="true"></span></summary>
+            <p>Yes. Compare entire rows or select one or several columns. Multi-column comparisons always follow worksheet column order, regardless of the order in which you select them.</p>
+          </details>
+          <details>
+            <summary>What happens to headers, formulas, dates, and formatting?<span aria-hidden="true"></span></summary>
+            <p>The first row is treated as a header by default, and dates and values are compared by saved display text. If any row would be removed from a workbook containing formulas, the tool stops to avoid unsafe formula shifts. Advanced features such as styles, charts, validation, and named ranges are listed as risks and require confirmation before a rewrite.</p>
+          </details>
+          <details>
+            <summary>Does the tool change my original workbook?<span aria-hidden="true"></span></summary>
+            <p>No. The original file is never overwritten. The tool creates a separate download, and if no rows need removal it returns the original workbook bytes unchanged.</p>
+          </details>
+          <details>
+            <summary>Why can a password-protected or macro-enabled workbook not be opened?<span aria-hidden="true"></span></summary>
+            <p>Encrypted workbooks cannot be read safely in this local tool, and macro-enabled files can contain executable code that this tool does not preserve or run. Save a password-free, macro-free .xlsx copy before processing.</p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p><span class="status-dot" aria-hidden="true"></span> Workbook contents stay in this browser.</p>
+      <nav aria-label="Footer navigation">
+        <a href="/">Text tool</a>
+        <a href="https://github.com/describesomeone/remove-duplicates">GitHub</a>
+        <a href="/terms" data-legal-link="terms">Terms</a>
+        <a href="/privacy" data-legal-link="privacy">Privacy</a>
+      </nav>
+    </footer>
+
+    <dialog class="legal-dialog" data-legal-dialog aria-label="Legal information">
+      <div class="legal-dialog-shell">
+        <header>
+          <span class="brand-name">remove<b>duplicates</b><i>.org</i></span>
+          <button type="button" data-dialog-close aria-label="Close legal information">Close <span aria-hidden="true">×</span></button>
+        </header>
+        <div class="legal-dialog-scroll">
+          <article data-legal-content="terms" hidden>
+            <p class="eyebrow">Terms of use</p>
+            <h2 data-legal-title>Clear terms for a focused tool.</h2>
+            <p class="legal-updated">Effective July 16, 2026</p>
+            <h3>Using the service</h3>
+            <p>RemoveDuplicates.org provides free browser-based tools for removing duplicate lines from text and duplicate rows from XLSX workbooks. Use them only for lawful work and content you are allowed to process.</p>
+            <h3>Results and responsibility</h3>
+            <p>Matching rules change which rows remain. Formula workbooks are blocked when rows would move, and advanced workbook features may require a risk confirmation. Review the separate download and keep your original file.</p>
+            <h3>Availability</h3>
+            <p>The service is provided as available, without warranties of uninterrupted availability, accuracy, or fitness for a particular purpose.</p>
+            <p><a href="/terms">Open the full Terms page</a></p>
+          </article>
+          <article data-legal-content="privacy" hidden>
+            <p class="eyebrow">Privacy</p>
+            <h2 data-legal-title>Your workbook stays inside the browser.</h2>
+            <p class="legal-updated">Effective July 16, 2026</p>
+            <h3>Content you process</h3>
+            <p>Selected XLSX files are checked and processed in browser memory by a same-origin Worker. Their contents are not uploaded, placed in the URL, or persisted by RemoveDuplicates.org.</p>
+            <h3>Downloads and page requests</h3>
+            <p>A cleaned workbook becomes a local browser download. Cloudflare still processes ordinary request metadata needed to deliver and protect this page, but workbook contents are not part of those requests.</p>
+            <h3>Storage</h3>
+            <p>The site does not store workbook data in cookies, local storage, session storage, IndexedDB, analytics, or an account.</p>
+            <p><a href="/privacy">Open the full Privacy page</a></p>
+          </article>
+        </div>
+      </div>
+    </dialog>
+
+    <p class="visually-hidden" aria-live="polite" aria-atomic="true" data-excel-announcer></p>
+    <script type="module" src="/js/excel-app.js?v=20260716.2"></script>
+  </body>
+</html>

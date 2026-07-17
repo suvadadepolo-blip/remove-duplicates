@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#eef1ed">
+    <meta name="color-scheme" content="light">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <title>Remove Duplicates Online — Lines &amp; Text Lists</title>
+    <meta name="description" content="Effortlessly remove duplicate lines from your text lists. Clean repeated entries online for free and privately in your browser—nothing is uploaded.">
+    <link rel="canonical" href="https://removeduplicates.org/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="RemoveDuplicates.org">
+    <meta property="og:title" content="Remove Duplicates Online — Lines &amp; Text Lists">
+    <meta property="og:description" content="Effortlessly remove duplicate lines from text lists—free, private, and entirely in your browser.">
+    <meta property="og:url" content="https://removeduplicates.org/">
+    <meta property="og:image" content="https://removeduplicates.org/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A repeated text list becoming a clean list of unique lines">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Remove Duplicates Online — Lines &amp; Text Lists">
+    <meta name="twitter:description" content="Effortlessly remove duplicate lines from text lists—free, private, and entirely in your browser.">
+    <meta name="twitter:image" content="https://removeduplicates.org/og-image.png">
+    <meta name="twitter:image:alt" content="A repeated text list becoming a clean list of unique lines">
+    <link rel="stylesheet" href="/styles.css?v=20260716.2">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "@id": "https://removeduplicates.org/#application",
+            "url": "https://removeduplicates.org/",
+            "name": "Remove Duplicates Online",
+            "alternateName": "RemoveDuplicates.org",
+            "description": "A free, private browser-based tool for removing duplicate lines and repeated entries from text lists.",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires a modern browser with JavaScript enabled.",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "Remove duplicate lines from text lists while preserving their order",
+              "Keep the first or last occurrence",
+              "Ignore capitalization and trim surrounding spaces",
+              "Sort, copy, and download unique lines",
+              "Remove duplicate spreadsheet rows by entire row or one column",
+              "Parse pasted Excel and Google Sheets data plus quoted CSV files",
+              "On-device processing with no text uploads"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://removeduplicates.org/#faq-data",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is my text uploaded or stored?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Your pasted text and opened files are processed in browser memory, and large inputs may be handled by a Web Worker in the same browser tab. The site does not upload or persist that content."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I remove duplicates without changing the original order?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Preserve order is the default. Choose Sort unique lines only when you want the cleaned result reordered."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do Ignore case and Trim spaces work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Ignore case treats values such as Apple and apple as duplicates. Trim spaces removes surrounding spaces before lines are compared and uses the trimmed line in the result."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I open a text or CSV file?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Choose or drop a TXT, CSV, TSV, LOG, Markdown, or LIST file up to 5 MB. Your browser reads it directly; the file is not uploaded to RemoveDuplicates.org."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I remove duplicate rows from Excel or Google Sheets?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. For an XLSX workbook, use the Excel duplicate remover to choose a worksheet and comparison columns, then download a cleaned copy. You can also copy Excel or Google Sheets rows and paste them here for text-based cleanup."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does it work with CSV files?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Drop a CSV file up to 5 MB. Quoted fields, embedded commas, and embedded newlines are handled locally, and nothing in the file is uploaded."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+    <script type="module" src="/js/app.js?v=20260716.2"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#dedupe-tool">Skip to the duplicate remover</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="RemoveDuplicates.org home">
+          <svg class="brand-mark" viewBox="0 0 42 42" aria-hidden="true">
+            <path d="M8 10h24M8 17h17M8 24h24M8 31h14"></path>
+            <path class="brand-cut" d="m29 16 6 6m0-6-6 6"></path>
+          </svg>
+          <span class="brand-name">remove<b>duplicates</b><i>.org</i></span>
+        </a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a href="/excel">Excel tool</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#faq">FAQ</a>
+          <a href="https://github.com/describesomeone/remove-duplicates">GitHub</a>
+        </nav>
+        <span class="local-badge"><i aria-hidden="true"></i> Runs in your browser</span>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="tool-section" id="dedupe-tool" aria-labelledby="page-title">
+        <div class="tool-intro">
+          <div>
+            <p class="eyebrow">Duplicate remover</p>
+            <h1 id="page-title">Remove duplicates from lines and lists.</h1>
+          </div>
+          <p>Effortlessly remove duplicate lines from your text lists. Paste text, type a list, or drop a TXT or CSV file—nothing you enter is uploaded.</p>
+        </div>
+
+        <div class="privacy-note" role="note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2M5 10h14v10H5z"></path><path d="M12 14v2"></path></svg>
+          <span><strong>Private by default.</strong> Your text and files stay in this browser tab.</span>
+          <a href="/privacy" data-legal-link="privacy">Privacy details</a>
+        </div>
+
+        <div class="tool-shell" data-tool-state="ready">
+          <div class="mobile-tabs" role="tablist" aria-label="Text workspace">
+            <button id="inputTab" type="button" role="tab" aria-selected="true" aria-controls="inputPanel" data-mobile-tab="input">
+              Input <span data-mobile-input-count>0</span>
+            </button>
+            <button id="resultTab" type="button" role="tab" aria-selected="false" aria-controls="resultPanel" data-mobile-tab="result">
+              Result <span data-mobile-result-count>0</span>
+            </button>
+          </div>
+
+          <div class="workspace" data-mobile-active="input">
+            <article class="workspace-panel input-panel" id="inputPanel" role="tabpanel" aria-labelledby="inputTab inputLabel" data-mobile-panel="input" data-drop-zone>
+              <header class="panel-heading">
+                <div>
+                  <span class="panel-index" aria-hidden="true">01</span>
+                  <label id="inputLabel" for="inputText">Input lines</label>
+                </div>
+                <div class="panel-actions">
+                  <button class="text-button" type="button" data-file-trigger>Open file</button>
+                  <input class="visually-hidden" type="file" id="fileInput" accept=".txt,.csv,.tsv,.log,.md,.list,.xlsx,.xls,.xlsm,.ods,.numbers,text/plain,text/csv,application/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-file-input tabindex="-1" aria-label="Open a text, CSV, or spreadsheet file">
+                  <button class="text-button" type="button" data-sample data-action="sample">Use sample</button>
+                  <button class="text-button danger-text" type="button" data-clear data-action="clear">Clear</button>
+                </div>
+              </header>
+              <div class="editor-wrap">
+                <textarea id="inputText" data-input spellcheck="false" autocomplete="off" placeholder="Paste one item per line…" aria-describedby="inputHint"></textarea>
+                <div class="drop-overlay" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 15v5h14v-5"></path></svg>
+                  <strong>Drop your text or CSV file here</strong>
+                </div>
+              </div>
+              <p class="panel-hint" id="inputHint"><span class="input-hint-copy">Paste, type, or drop a text/CSV file up to 5 MB. <span class="detected-chip" data-detected-format hidden></span></span><span data-input-lines>0 lines</span></p>
+            </article>
+
+            <article class="workspace-panel output-panel" id="resultPanel" role="tabpanel" aria-labelledby="resultTab outputLabel" data-mobile-panel="result">
+              <header class="panel-heading">
+                <div>
+                  <span class="panel-index clean" aria-hidden="true">02</span>
+                  <label id="outputLabel" for="outputText">Cleaned text</label>
+                </div>
+                <div class="panel-actions">
+                  <button class="text-button" type="button" data-copy data-action="copy" disabled>Copy</button>
+                  <button class="text-button" type="button" data-download data-action="download" disabled>Download .txt</button>
+                </div>
+              </header>
+              <div class="editor-wrap output-wrap">
+                <textarea id="outputText" data-output readonly spellcheck="false" placeholder="Unique lines will appear here…" aria-describedby="outputHint"></textarea>
+                <div class="empty-result" aria-hidden="true" data-empty-result>
+                  <span>Unique lines appear here</span>
+                </div>
+              </div>
+              <p class="panel-hint" id="outputHint"><span>Ready to copy or download after processing.</span><span data-output-lines>0 lines</span></p>
+            </article>
+          </div>
+
+          <div class="control-deck">
+            <div class="option-grid">
+              <fieldset class="option-group choice-options format-options">
+                <legend>Format</legend>
+                <div class="segmented-control format-control" data-format-control>
+                  <label><input type="radio" name="format" value="auto" data-option="format" checked><span>Auto</span></label>
+                  <label><input type="radio" name="format" value="lines" data-option="format"><span>Lines</span></label>
+                  <label><input type="radio" name="format" value="table" data-option="format"><span>Table</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="option-group match-options">
+                <legend>Match rules</legend>
+                <label class="check-option">
+                  <input type="checkbox" data-ignore-case data-option="ignore-case">
+                  <span aria-hidden="true"></span>
+                  Ignore case
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" data-trim data-option="trim">
+                  <span aria-hidden="true"></span>
+                  Trim spaces
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" data-remove-empty data-option="remove-empty" checked>
+                  <span aria-hidden="true"></span>
+                  Remove empty lines
+                </label>
+              </fieldset>
+
+              <fieldset class="option-group choice-options">
+                <legend>When a line repeats</legend>
+                <div class="segmented-control">
+                  <label><input type="radio" name="keep" value="first" data-option="keep" checked><span>Keep first</span></label>
+                  <label><input type="radio" name="keep" value="last" data-option="keep"><span>Keep last</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="option-group choice-options">
+                <legend>Result order</legend>
+                <div class="segmented-control">
+                  <label><input type="radio" name="order" value="preserve" data-option="order" checked><span>Preserve order</span></label>
+                  <label><input type="radio" name="order" value="sort" data-option="order"><span>Sort unique lines</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="option-group table-options" data-table-options hidden>
+                <legend>Table rules</legend>
+                <div class="table-option-fields">
+                  <label class="select-option" for="compareBy"><span>Compare by</span><select id="compareBy" data-compare><option value="row">Entire row</option></select></label>
+                  <label class="check-option">
+                    <input type="checkbox" data-header data-option="header">
+                    <span aria-hidden="true"></span>
+                    First row is header
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="process-row">
+              <div class="process-status">
+                <span class="status-dot" aria-hidden="true"></span>
+                <p data-status role="status" aria-live="polite">Ready for your text.</p>
+                <button class="text-button status-undo" type="button" data-undo hidden>Undo</button>
+              </div>
+              <button class="process-button" type="button" data-process data-action="process">
+                <span>Remove duplicates</span>
+                <kbd aria-hidden="true" data-shortcut-hint>⌘ ↵</kbd>
+              </button>
+            </div>
+          </div>
+
+          <dl class="stats-strip" aria-label="Duplicate removal statistics" data-stats>
+            <div>
+              <dt data-stat-label="total">Total lines</dt>
+              <dd data-stat="total">0</dd>
+            </div>
+            <span class="stats-arrow" aria-hidden="true">→</span>
+            <div>
+              <dt data-stat-label="unique">Unique lines</dt>
+              <dd data-stat="unique">0</dd>
+            </div>
+            <div class="removed-stat">
+              <dt data-stat-label="removed">Lines removed</dt>
+              <dd data-stat="removed">0</dd>
+            </div>
+            <div>
+              <dt>Reduction</dt>
+              <dd data-stat="reduction">0%</dd>
+            </div>
+          </dl>
+
+          <noscript>
+            <p class="noscript-message">RemoveDuplicates.org needs JavaScript to clean text in your browser. This form never submits your text to a server.</p>
+          </noscript>
+        </div>
+      </section>
+
+      <section class="how-section" id="how-it-works" aria-labelledby="how-title">
+        <div class="section-heading">
+          <p class="eyebrow">Built for real-world lists</p>
+          <h2 id="how-title">Choose what “duplicate” means.</h2>
+          <p>Names, URLs, exports, and copied lists rarely arrive perfectly clean. The matching rules make the result predictable before you copy it back.</p>
+        </div>
+        <div class="rule-example" aria-label="Duplicate removal example">
+          <div class="example-before">
+            <span>Before</span>
+            <code>Maple Street</code>
+            <code class="duplicate-line">maple street <small>duplicate</small></code>
+            <code>River Road</code>
+            <code class="duplicate-line">Maple Street <small>duplicate</small></code>
+          </div>
+          <div class="example-gutter" aria-hidden="true">→</div>
+          <div class="example-after">
+            <span>After · ignore case</span>
+            <code>Maple Street</code>
+            <code>River Road</code>
+            <p>2 unique lines · 2 removed</p>
+          </div>
+        </div>
+        <ol class="process-list">
+          <li><b>Paste or open</b><span>Add one item per line, or drop a TXT file onto the input.</span></li>
+          <li><b>Set the rules</b><span>Control capitalization, spaces, empty lines, which copy survives, and ordering.</span></li>
+          <li><b>Use the result</b><span>Copy the cleaned text or download it as a new TXT file.</span></li>
+        </ol>
+      </section>
+
+      <section class="privacy-section" aria-labelledby="privacy-title">
+        <div class="privacy-symbol" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div>
+          <p class="eyebrow">Local processing</p>
+          <h2 id="privacy-title">The list is yours. It stays that way.</h2>
+          <p>Pasted text, opened text files, and selected XLSX workbooks are read in browser memory. Larger work may use a Web Worker inside the same tab. There are no content uploads, accounts, saved drafts, analytics scripts, or advertising pixels.</p>
+        </div>
+        <a href="/privacy" data-legal-link="privacy">See exactly what is processed <span aria-hidden="true">→</span></a>
+      </section>
+
+      <section class="faq-section" id="faq" aria-labelledby="faq-title">
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">Good to know</p>
+          <h2 id="faq-title">Duplicate line questions, answered.</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Is my text uploaded or stored?<span aria-hidden="true"></span></summary>
+            <p>No. Your pasted text and opened files are processed in browser memory, and large inputs may be handled by a Web Worker in the same browser tab. The site does not upload or persist that content.</p>
+          </details>
+          <details>
+            <summary>Can I remove duplicates without changing the original order?<span aria-hidden="true"></span></summary>
+            <p>Yes. Preserve order is the default. Choose Sort unique lines only when you want the cleaned result reordered.</p>
+          </details>
+          <details>
+            <summary>How do Ignore case and Trim spaces work?<span aria-hidden="true"></span></summary>
+            <p>Ignore case treats values such as Apple and apple as duplicates. Trim spaces removes surrounding spaces before lines are compared and uses the trimmed line in the result.</p>
+          </details>
+          <details>
+            <summary>Can I open a text or CSV file?<span aria-hidden="true"></span></summary>
+            <p>Yes. Choose or drop a TXT, CSV, TSV, LOG, Markdown, or LIST file up to 5 MB. Your browser reads it directly; the file is not uploaded to RemoveDuplicates.org.</p>
+          </details>
+          <details>
+            <summary>Can I remove duplicate rows from Excel or Google Sheets?<span aria-hidden="true"></span></summary>
+            <p>Yes. For an XLSX workbook, use the <a href="/excel">Excel duplicate remover</a> to choose a worksheet and comparison columns, then download a cleaned copy. You can also copy Excel or Google Sheets rows and paste them here for text-based cleanup.</p>
+          </details>
+          <details>
+            <summary>Does it work with CSV files?<span aria-hidden="true"></span></summary>
+            <p>Yes. Drop a CSV file up to 5 MB. Quoted fields, embedded commas, and embedded newlines are handled locally, and nothing in the file is uploaded.</p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <a class="footer-brand" href="/">RemoveDuplicates.org</a>
+        <p>Clean lines. Zero uploads.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="/excel">Excel tool</a>
+        <a href="https://github.com/describesomeone/remove-duplicates">GitHub</a>
+        <a href="/terms" data-legal-link="terms">Terms</a>
+        <a href="/privacy" data-legal-link="privacy">Privacy</a>
+      </nav>
+      <p>© 2026 RemoveDuplicates.org</p>
+    </footer>
+
+    <dialog class="legal-dialog" data-legal-dialog aria-label="Legal information">
+      <div class="legal-dialog-shell">
+        <header>
+          <a class="dialog-brand" href="/">RemoveDuplicates.org</a>
+          <button type="button" data-dialog-close aria-label="Close legal information">Close <span aria-hidden="true">×</span></button>
+        </header>
+        <article data-legal-content="terms" hidden>
+          <p class="eyebrow">Terms of use</p>
+          <h2 data-legal-title>Clear terms for a focused tool.</h2>
+          <p class="legal-updated">Effective July 16, 2026</p>
+          <h3>Using the service</h3>
+          <p>RemoveDuplicates.org provides free browser-based tools for cleaning text and removing duplicate rows from supported XLSX workbooks. You may use them for lawful personal or commercial work without interfering with the service or another person's rights.</p>
+          <h3>Your content and results</h3>
+          <p>You keep all rights to the text and workbooks you process. Processing runs on your device, and that content is not received or stored by RemoveDuplicates.org. A cleaned workbook is offered as a separate download and never overwrites the original. Review matching choices, warnings, and downloaded results before relying on them.</p>
+          <h3>Availability and warranty</h3>
+          <p>The service is provided as available and without warranties of uninterrupted availability, accuracy, or fitness for a particular purpose.</p>
+          <h3>Changes</h3>
+          <p>The tool and these terms may change. The effective date identifies the current version.</p>
+          <a class="direct-legal-link" href="/terms">Open the standalone Terms page</a>
+        </article>
+        <article data-legal-content="privacy" hidden>
+          <p class="eyebrow">Privacy</p>
+          <h2 data-legal-title>Your text and workbooks stay inside the browser.</h2>
+          <p class="legal-updated">Effective July 16, 2026</p>
+          <h3>Text and files</h3>
+          <p>Pasted text, opened text files, and selected XLSX workbooks are processed in browser memory. Larger inputs may be processed by a Web Worker inside the same tab. The content is not uploaded, persisted by the site, or placed in the page URL.</p>
+          <h3>Tracking and storage</h3>
+          <p>RemoveDuplicates.org does not use analytics scripts, advertising pixels, accounts, tracking cookies, third-party fonts, or saved drafts.</p>
+          <h3>Cloudflare request data</h3>
+          <p>Cloudflare may process basic request data such as your IP address, browser headers, requested path, timestamps, and security events to deliver and protect the page. Those requests do not contain the text or workbook contents you process.</p>
+          <h3>Your control</h3>
+          <p>Cleaned workbooks are generated in memory and offered as separate downloads; the original file is not overwritten. Review each downloaded copy before replacing anything, and close or refresh the tab to clear current work from the page.</p>
+          <a class="direct-legal-link" href="/privacy">Open the standalone Privacy page</a>
+        </article>
+      </div>
+    </dialog>
+
+    <p class="visually-hidden" aria-live="polite" aria-atomic="true" data-announcer></p>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+node_modules/
+.wrangler/
+.codex-results/
+output/
+.DS_Store
+*.log
+
+# Vendored browser library with pinned source receipts and upstream license.
+!public/vendor/
+!public/vendor/**
+
+# Internal planning and provider evidence stay local.
+EXCEL_PLAN.md
+IMPROVEMENT_PLAN.md
+PROJECT_STATE.md
+UTILITY_BASELINE.md
+ops/
+
+# Project credentials and generated runtime environments never belong in Git.
+.env*
+!.env.example
+!.env.sample
+!.env.template
+local.env.txt
+*.env.txt

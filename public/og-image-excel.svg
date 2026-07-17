@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#eef1ed"/>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace">
+    <text x="72" y="78" fill="#17231f" font-size="25" font-weight="700">remove<tspan fill="#0d6c61">duplicates</tspan><tspan fill="#68736e" font-size="17">.org/excel</tspan></text>
+    <text x="72" y="157" fill="#17231f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="55" font-weight="740" letter-spacing="-2.5">Clean duplicate rows.</text>
+    <text x="72" y="213" fill="#17231f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="55" font-weight="740" letter-spacing="-2.5">Keep the workbook local.</text>
+
+    <g transform="translate(72 273)">
+      <rect width="493" height="244" rx="7" fill="#fff" stroke="#aebbb5"/>
+      <rect width="493" height="48" rx="7" fill="#17231f"/>
+      <path d="M0 48h493M0 112h493M0 176h493M114 0v244M284 0v244" stroke="#cfd7d2"/>
+      <g font-size="15">
+        <text x="18" y="30" fill="#fff" font-weight="700">ID</text>
+        <text x="132" y="30" fill="#fff" font-weight="700">EMAIL</text>
+        <text x="302" y="30" fill="#fff" font-weight="700">CITY</text>
+        <text x="18" y="87" fill="#17231f">102</text>
+        <text x="132" y="87" fill="#17231f">ada@example.com</text>
+        <text x="302" y="87" fill="#17231f">Paris</text>
+        <rect x="1" y="113" width="491" height="62" fill="#f4e5df"/>
+        <text x="18" y="151" fill="#a44b2e" text-decoration="line-through">102</text>
+        <text x="132" y="151" fill="#a44b2e" text-decoration="line-through">ada@example.com</text>
+        <text x="302" y="151" fill="#a44b2e" text-decoration="line-through">London</text>
+        <text x="18" y="216" fill="#17231f">205</text>
+        <text x="132" y="216" fill="#17231f">grace@example.com</text>
+        <text x="302" y="216" fill="#17231f">New York</text>
+      </g>
+    </g>
+
+    <g transform="translate(633 273)">
+      <text x="0" y="-18" fill="#0d6c61" font-size="14" font-weight="800" letter-spacing="2">CLEANED XLSX</text>
+      <rect width="495" height="180" rx="7" fill="#dcece8" stroke="#78aa9f"/>
+      <rect width="495" height="48" rx="7" fill="#0d6c61"/>
+      <path d="M0 48h495M0 114h495M114 0v180M284 0v180" stroke="#95c0b6"/>
+      <g font-size="15">
+        <text x="18" y="30" fill="#fff" font-weight="700">ID</text>
+        <text x="132" y="30" fill="#fff" font-weight="700">EMAIL</text>
+        <text x="302" y="30" fill="#fff" font-weight="700">CITY</text>
+        <text x="18" y="88" fill="#095249">102</text>
+        <text x="132" y="88" fill="#095249">ada@example.com</text>
+        <text x="302" y="88" fill="#095249">Paris</text>
+        <text x="18" y="154" fill="#095249">205</text>
+        <text x="132" y="154" fill="#095249">grace@example.com</text>
+        <text x="302" y="154" fill="#095249">New York</text>
+      </g>
+      <text x="0" y="231" fill="#17231f" font-size="34" font-weight="750">3 → 2 rows</text>
+      <text x="0" y="267" fill="#a44b2e" font-size="17">1 duplicate removed · original untouched</text>
+    </g>
+
+    <text x="72" y="581" fill="#68736e" font-size="17">Free · private · XLSX processing stays entirely in your browser</text>
+  </g>
+  <path d="M600 270v260" stroke="#0d6c61" stroke-width="5" stroke-linecap="round"/>
+</svg>

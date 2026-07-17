@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#eef1ed"/>
+  <path d="M596 0v630" stroke="#cfd7d2"/>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace">
+    <text x="76" y="86" fill="#17231f" font-size="26" font-weight="700">remove<tspan fill="#0d6c61">duplicates</tspan><tspan fill="#68736e" font-size="17">.org</tspan></text>
+    <text x="76" y="184" fill="#17231f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="62" font-weight="740" letter-spacing="-3">Remove repeats.</text>
+    <text x="76" y="251" fill="#17231f" font-family="ui-sans-serif, system-ui, sans-serif" font-size="62" font-weight="740" letter-spacing="-3">Keep what matters.</text>
+    <g font-size="21">
+      <rect x="76" y="321" width="434" height="58" rx="5" fill="#fff" stroke="#cfd7d2"/>
+      <text x="98" y="358" fill="#17231f">Maple Street</text>
+      <rect x="76" y="390" width="434" height="58" rx="5" fill="#f4e5df" stroke="#d8b7aa"/>
+      <text x="98" y="427" fill="#a84f31" text-decoration="line-through">maple street</text>
+      <text x="386" y="426" fill="#a84f31" font-size="13">DUPLICATE</text>
+      <rect x="76" y="459" width="434" height="58" rx="5" fill="#fff" stroke="#cfd7d2"/>
+      <text x="98" y="496" fill="#17231f">River Road</text>
+    </g>
+    <g font-size="21">
+      <text x="668" y="184" fill="#0d6c61" font-size="15" font-weight="700" letter-spacing="2">CLEANED TEXT</text>
+      <rect x="668" y="215" width="456" height="68" rx="5" fill="#dcece8" stroke="#95c0b6"/>
+      <path d="M690 249h18" stroke="#0d6c61" stroke-width="3" stroke-linecap="round"/>
+      <text x="728" y="256" fill="#0d6c61">Maple Street</text>
+      <rect x="668" y="295" width="456" height="68" rx="5" fill="#dcece8" stroke="#95c0b6"/>
+      <path d="M690 329h18" stroke="#0d6c61" stroke-width="3" stroke-linecap="round"/>
+      <text x="728" y="336" fill="#0d6c61">River Road</text>
+      <text x="668" y="421" fill="#17231f" font-size="40" font-weight="700">3 → 2 unique</text>
+      <text x="668" y="465" fill="#a84f31" font-size="18">1 duplicate removed</text>
+    </g>
+    <text x="76" y="573" fill="#68736e" font-size="17">Free · private · processed entirely in your browser</text>
+  </g>
+  <path d="M572 80v470" stroke="#0d6c61" stroke-width="5" stroke-linecap="round"/>
+</svg>

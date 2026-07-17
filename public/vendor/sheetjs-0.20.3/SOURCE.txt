@@ -1,0 +1,9 @@
+SheetJS Community Edition 0.20.3
+
+ESM source:
+https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs
+
+License source:
+https://cdn.sheetjs.com/xlsx-0.20.3/package/LICENSE
+
+Retrieved on 2026-07-16 through the approved OpenClaw runtime.

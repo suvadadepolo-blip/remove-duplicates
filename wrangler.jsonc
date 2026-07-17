@@ -1,0 +1,26 @@
+{
+  "name": "removeduplicates-org",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-07-14",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "removeduplicates.org",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.removeduplicates.org",
+      "custom_domain": true
+    }
+  ],
+  "dev": {
+    "host": "127.0.0.1"
+  },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "404-page",
+    "html_handling": "none"
+  }
+}

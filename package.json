@@ -1,0 +1,25 @@
+{
+  "name": "removeduplicates-org",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/describesomeone/remove-duplicates.git"
+  },
+  "homepage": "https://removeduplicates.org/",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "check": "node scripts/validate-static.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "npm run check && npm test",
+    "preview": "npx --yes wrangler@4.110.0 dev --ip 127.0.0.1 --port 3630",
+    "qa:browser": "bash scripts/openclaw-browser-validate.sh",
+    "qa:lighthouse": "node scripts/run-lighthouse.mjs",
+    "benchmark:xlsx": "node scripts/benchmark-xlsx.mjs",
+    "check:http": "node scripts/validate-http.mjs",
+    "deploy": "../bin/cf deploy --config wrangler.jsonc"
+  }
+}
