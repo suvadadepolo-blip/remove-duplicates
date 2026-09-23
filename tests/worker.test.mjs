@@ -24,7 +24,8 @@ function mockEnvironment({ missing = [] } = {}) {
     ["/terms.md", ["# Terms", "text/markdown"]],
     ["/llms.txt", ["# RemoveDuplicates.org", "text/plain"]],
     ["/.well-known/api-catalog", ['{"linkset":[]}', "application/octet-stream"]],
-    ["/.well-known/mcp/server-card.json", ["{}", "application/json"]]
+    ["/.well-known/mcp/server-card.json", ["{}", "application/json"]],
+    ["/.well-known/mcp-registry-auth", ["v=MCPv1; k=ed25519; p=", "application/octet-stream"]]
   ]);
 
   return {
@@ -466,7 +467,8 @@ test("serves agent discovery files with explicit types and open CORS", async () 
   const cases = [
     ["/llms.txt", "text/plain; charset=utf-8"],
     ["/.well-known/api-catalog", "application/linkset+json"],
-    ["/.well-known/mcp/server-card.json", "application/json"]
+    ["/.well-known/mcp/server-card.json", "application/json"],
+    ["/.well-known/mcp-registry-auth", "text/plain; charset=utf-8"]
   ];
 
   for (const [path, type] of cases) {

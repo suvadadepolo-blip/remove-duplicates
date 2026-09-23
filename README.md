@@ -29,6 +29,7 @@ License: MIT
 - Every page has a Markdown twin (`/index.md`, `/excel.md`, `/privacy.md`, `/terms.md`), also served for `Accept: text/markdown`. HTML routes send `Vary: Accept` and RFC 8288 `Link` headers for the API catalog, `llms.txt`, the agent-skills index, and the Markdown alternate.
 - `/.well-known/api-catalog` (RFC 9727), `/.well-known/mcp/server-card.json`, `/.well-known/agent-skills/index.json` with `remove-duplicates/SKILL.md`, and `/.well-known/ai-catalog.json`.
 - `/mcp` is a stateless Streamable HTTP MCP server with one tool, `remove_duplicates`, capped at 128 KiB of text per call. The homepage registers the same tool through WebMCP when the browser exposes `navigator.modelContext`; that path runs locally in the tab. Both share `public/js/agent-tool.js` and the site's `dedupe.js` engine.
+- `server.json` is the Official MCP Registry entry `org.removeduplicates/remove-duplicates`. Namespace ownership is proven over HTTP by `/.well-known/mcp-registry-auth` (Ed25519 public key); the private half lives only in the gitignored `local.env.txt`.
 - `node scripts/build-agent-files.mjs` regenerates the server card, the skill digest, and `llms-full.txt`; `npm run check` fails when they are stale.
 
 ## Commands

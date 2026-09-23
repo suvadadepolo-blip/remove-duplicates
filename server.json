@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "org.removeduplicates/remove-duplicates",
+  "title": "RemoveDuplicates.org",
+  "description": "Remove duplicate lines or CSV/TSV rows from text. Stateless: processed per call, never stored.",
+  "version": "1.0.0",
+  "websiteUrl": "https://removeduplicates.org/",
+  "repository": {
+    "url": "https://github.com/describesomeone/remove-duplicates",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://removeduplicates.org/favicon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    },
+    {
+      "src": "https://removeduplicates.org/icon-512.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://removeduplicates.org/mcp"
+    }
+  ]
+}
