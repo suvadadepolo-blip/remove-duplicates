@@ -15,8 +15,15 @@ function record(condition, label, details = undefined) {
   checks.push({ label, pass: Boolean(condition), ...(details === undefined ? {} : { details }) });
 }
 
+// A network failure is recorded as a failed check so one unreachable host
+// cannot hide the rest of the matrix.
 async function request(url, options = {}) {
-  return fetch(url, { redirect: "manual", ...options });
+  try {
+    return await fetch(url, { redirect: "manual", ...options });
+  } catch (error) {
+    record(false, `${options.method ?? "GET"} ${url} is reachable`, error.cause?.code ?? error.message);
+    return new Response(null, { status: 599 });
+  }
 }
 
 async function expectStatus(url, status, options = {}) {
@@ -61,6 +68,56 @@ record(!homepageText.includes("sheetjs-0.20.3/xlsx.mjs"), "homepage HTML does no
 const sitemap = await expectStatus(`${canonicalOrigin}/sitemap.xml${cacheBust}`, 200);
 const sitemapText = await sitemap.text();
 record((sitemapText.match(/<loc>/g) ?? []).length === 2 && sitemapText.includes("https://removeduplicates.org/excel"), "sitemap contains exactly home and Excel routes");
+
+// Agent and answer-engine surfaces.
+record(homepage.headers.get("link")?.includes('rel="api-catalog"'), "homepage Link header advertises the API catalog", homepage.headers.get("link"));
+record(homepage.headers.get("vary")?.includes("Accept"), "homepage varies on Accept", homepage.headers.get("vary"));
+
+const markdownHome = await expectStatus(`${canonicalOrigin}/${cacheBust}`, 200, { headers: { Accept: "text/markdown" } });
+record(markdownHome.headers.get("content-type")?.startsWith("text/markdown"), "Accept: text/markdown negotiates Markdown", markdownHome.headers.get("content-type"));
+record((await markdownHome.text()).startsWith("# Remove duplicates"), "negotiated homepage Markdown carries the page heading");
+const markdownExcel = await expectStatus(`${canonicalOrigin}/excel.md${cacheBust}`, 200);
+record(markdownExcel.headers.get("link") === '<https://removeduplicates.org/excel>; rel="canonical"', "direct Markdown twin declares its canonical page", markdownExcel.headers.get("link"));
+
+const robots = await expectStatus(`${canonicalOrigin}/robots.txt${cacheBust}`, 200);
+record((await robots.text()).includes("Content-Signal: search=yes, ai-input=yes, ai-train=yes"), "robots.txt serves Content Signals");
+
+const llms = await expectStatus(`${canonicalOrigin}/llms.txt${cacheBust}`, 200);
+record(llms.headers.get("content-type") === "text/plain; charset=utf-8" && llms.headers.get("access-control-allow-origin") === "*", "llms.txt is plain text with open CORS", llms.headers.get("content-type"));
+record((await llms.text()).startsWith("# RemoveDuplicates.org"), "llms.txt starts with the site H1");
+await expectStatus(`${canonicalOrigin}/llms-full.txt${cacheBust}`, 200);
+const llmAlias = await expectStatus(`${canonicalOrigin}/llm.txt`, 308);
+record(llmAlias.headers.get("location") === "/llms.txt", "singular llm.txt redirects to llms.txt", llmAlias.headers.get("location"));
+
+const apiCatalog = await expectStatus(`${canonicalOrigin}/.well-known/api-catalog${cacheBust}`, 200);
+record(apiCatalog.headers.get("content-type") === "application/linkset+json", "API catalog uses application/linkset+json", apiCatalog.headers.get("content-type"));
+record((await apiCatalog.json()).linkset?.[0]?.anchor === "https://removeduplicates.org/mcp", "API catalog anchors the MCP endpoint");
+for (const file of ["/.well-known/ai-catalog.json", "/.well-known/mcp/server-card.json"]) {
+  const response = await expectStatus(`${canonicalOrigin}${file}${cacheBust}`, 200);
+  record(response.headers.get("access-control-allow-origin") === "*", `${file} allows cross-origin reads`);
+  await response.json();
+}
+const skillsIndex = await (await expectStatus(`${canonicalOrigin}/.well-known/agent-skills/index.json${cacheBust}`, 200)).json();
+const skill = skillsIndex.skills?.[0];
+const skillBytes = Buffer.from(await (await expectStatus(`${canonicalOrigin}${skill?.url}${cacheBust}`, 200)).arrayBuffer());
+record(skill?.digest === `sha256:${createHash("sha256").update(skillBytes).digest("hex")}`, "served SKILL.md matches its published sha256 digest", skill?.digest);
+
+const mcp = async (message) =>
+  request(`${canonicalOrigin}/mcp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, ...message })
+  });
+const initialize = await (await mcp({ method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "rdqa", version: "1" } } })).json();
+record(initialize.result?.protocolVersion === "2025-06-18" && initialize.result?.serverInfo?.name === "removeduplicates", "MCP initialize negotiates the requested protocol", initialize.result?.protocolVersion);
+const toolList = await (await mcp({ method: "tools/list" })).json();
+record(toolList.result?.tools?.map((tool) => tool.name).join() === "remove_duplicates", "MCP lists the remove_duplicates tool");
+const toolCall = await mcp({ method: "tools/call", params: { name: "remove_duplicates", arguments: { text: "b\nA\na\nb", ignoreCase: true } } });
+record(toolCall.headers.get("access-control-allow-origin") === "*", "MCP responses allow cross-origin clients");
+const toolResult = (await toolCall.json()).result?.structuredContent;
+record(toolResult?.text === "b\nA" && toolResult?.stats?.removed === 2, "MCP tool call returns the engine result", toolResult);
+const mcpGet = await expectStatus(`${canonicalOrigin}/mcp`, 405);
+record(mcpGet.headers.get("allow") === "POST, OPTIONS", "MCP GET advertises POST and OPTIONS", mcpGet.headers.get("allow"));
 
 if (mode === "production") {
   const redirects = [

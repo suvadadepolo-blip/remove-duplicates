@@ -2,12 +2,12 @@ import {
   WorkbookProcessingError,
   dedupeWorkbook,
   inspectWorkbook
-} from "./workbook-adapter.js?v=20260716.2";
+} from "./workbook-adapter.js?v=20260923.1";
 import {
   XlsxPreflightError,
   inspectXlsxPackage,
   validateXlsxFileName
-} from "./xlsx-preflight.js?v=20260716.2";
+} from "./xlsx-preflight.js?v=20260923.1";
 
 const FIXED_ERRORS = Object.freeze({
   invalid_package: "Choose an XLSX file before processing.",

@@ -1,0 +1,50 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "RemoveDuplicates.org",
+    "identifier": "did:web:removeduplicates.org"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:removeduplicates.org:server:removeduplicates",
+      "displayName": "RemoveDuplicates.org MCP server",
+      "type": "application/mcp-server-card+json",
+      "url": "https://removeduplicates.org/.well-known/mcp/server-card.json",
+      "representativeQueries": [
+        "remove duplicate lines from this list",
+        "deduplicate these CSV rows by the email column",
+        "remove duplicates but ignore case and keep the last occurrence"
+      ]
+    },
+    {
+      "identifier": "urn:air:removeduplicates.org:api:catalog",
+      "displayName": "RemoveDuplicates.org API catalog",
+      "type": "application/linkset+json",
+      "url": "https://removeduplicates.org/.well-known/api-catalog",
+      "representativeQueries": [
+        "is there an API to remove duplicate lines",
+        "duplicate remover MCP endpoint"
+      ]
+    },
+    {
+      "identifier": "urn:air:removeduplicates.org:skill:remove-duplicates",
+      "displayName": "Remove duplicates skill",
+      "type": "text/markdown",
+      "url": "https://removeduplicates.org/.well-known/agent-skills/remove-duplicates/SKILL.md",
+      "representativeQueries": [
+        "how can an agent remove duplicates from a list",
+        "remove duplicate rows from an Excel file privately"
+      ]
+    },
+    {
+      "identifier": "urn:air:removeduplicates.org:doc:llms-txt",
+      "displayName": "RemoveDuplicates.org route map for language models",
+      "type": "text/plain",
+      "url": "https://removeduplicates.org/llms.txt",
+      "representativeQueries": [
+        "what does removeduplicates.org do",
+        "does removeduplicates.org upload my data"
+      ]
+    }
+  ]
+}

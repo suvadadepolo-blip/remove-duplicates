@@ -1,4 +1,4 @@
-import { selectSurvivorRows } from "./dedupe.js?v=20260716.2";
+import { selectSurvivorRows } from "./dedupe.js?v=20260923.1";
 
 export const SHEETJS_VERSION = "0.20.3";
 export const WORKBOOK_CELL_LIMIT = 500_000;

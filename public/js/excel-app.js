@@ -3,7 +3,7 @@ import {
   XlsxPreflightError,
   inspectXlsxPackage,
   validateXlsxFileName
-} from "./xlsx-preflight.js?v=20260716.2";
+} from "./xlsx-preflight.js?v=20260923.1";
 
 const XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 const MAX_SELECTED_SHEET_CELLS = 250_000;
@@ -326,7 +326,7 @@ function handleWorkerError(message) {
 function createWorker() {
   let worker;
   try {
-    worker = new Worker(new URL("./excel-worker.js?v=20260716.2", import.meta.url), {
+    worker = new Worker(new URL("./excel-worker.js?v=20260923.1", import.meta.url), {
       type: "module",
       name: "removeduplicates-excel-local"
     });

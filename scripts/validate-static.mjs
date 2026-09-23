@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -46,7 +47,20 @@ const [
   fixtureGenerator,
   xlsxBenchmark,
   httpValidator,
-  browserShell
+  browserShell,
+  llmsText,
+  homeMarkdown,
+  excelMarkdown,
+  privacyMarkdown,
+  termsMarkdown,
+  skillMd,
+  apiCatalogRaw,
+  aiCatalogRaw,
+  serverCardRaw,
+  skillsIndexRaw,
+  agentToolModule,
+  webMcpModule,
+  mcpSource
 ] = await Promise.all([
   read("public/index.html"),
   read("public/excel/index.html"),
@@ -85,7 +99,20 @@ const [
   read("scripts/generate-xlsx-fixtures.mjs"),
   read("scripts/benchmark-xlsx.mjs"),
   read("scripts/validate-http.mjs"),
-  read("scripts/openclaw-browser-validate.sh")
+  read("scripts/openclaw-browser-validate.sh"),
+  read("public/llms.txt"),
+  read("public/index.md"),
+  read("public/excel.md"),
+  read("public/privacy.md"),
+  read("public/terms.md"),
+  read("public/.well-known/agent-skills/remove-duplicates/SKILL.md"),
+  read("public/.well-known/api-catalog"),
+  read("public/.well-known/ai-catalog.json"),
+  read("public/.well-known/mcp/server-card.json"),
+  read("public/.well-known/agent-skills/index.json"),
+  read("public/js/agent-tool.js"),
+  read("public/js/webmcp.js"),
+  read("src/mcp.js")
 ]);
 
 const failures = [];
@@ -559,7 +586,9 @@ const versionStamps = [
   dedupe,
   dedupeWorker,
   excelWorker,
-  workbookAdapter
+  workbookAdapter,
+  agentToolModule,
+  webMcpModule
 ]
   .flatMap((source) => [...source.matchAll(/\?v=([0-9.]+)/g)].map((match) => match[1]));
 check(versionStamps.length >= 15 && new Set(versionStamps).size === 1, "all CSS and JS version stamps are synchronized");
@@ -598,6 +627,116 @@ check(
   "sitemap publishes exactly the canonical home and Excel routes"
 );
 check(robots.includes("Sitemap: https://removeduplicates.org/sitemap.xml"), "robots advertises the canonical sitemap");
+
+// Agent and answer-engine surfaces.
+const robotsWildcard = robots.split(/\n(?=User-agent:)/).find((group) => /^User-agent: \*$/m.test(group)) ?? "";
+check(
+  /^Content-Signal: search=yes, ai-input=yes, ai-train=yes$/m.test(robotsWildcard) && !/^Disallow:/m.test(robots),
+  "robots declares Content Signals for all crawlers and disallows nothing"
+);
+check(
+  ["OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot", "GPTBot", "ClaudeBot", "Google-Extended"]
+    .every((agent) => new RegExp(`^User-agent: ${agent}\\nAllow: /$`, "m").test(robots)),
+  "robots names the major answer-engine and AI crawlers explicitly"
+);
+check(
+  /^# RemoveDuplicates\.org\n\n> .+/.test(llmsText) && /^## Tools$/m.test(llmsText) && /^## Optional$/m.test(llmsText),
+  "llms.txt follows the llmstxt.org H1, summary, and section structure"
+);
+
+const agentBuild = spawnSync(process.execPath, [path.join(root, "scripts/build-agent-files.mjs"), "--check"], {
+  encoding: "utf8"
+});
+check(
+  agentBuild.status === 0,
+  `server card, skills digest, and llms-full.txt match their sources${agentBuild.stderr ? `: ${agentBuild.stderr.trim()}` : ""}`
+);
+for (const [label, source] of [
+  ["api-catalog", apiCatalogRaw],
+  ["ai-catalog.json", aiCatalogRaw],
+  ["mcp server card", serverCardRaw],
+  ["agent-skills index", skillsIndexRaw]
+]) {
+  try {
+    JSON.parse(source);
+    passes.push(`${label} is valid JSON`);
+  } catch (error) {
+    failures.push(`${label} is valid JSON: ${error.message}`);
+  }
+}
+check(
+  JSON.parse(apiCatalogRaw).linkset?.[0]?.anchor === "https://removeduplicates.org/mcp" &&
+    JSON.parse(serverCardRaw).transport?.endpoint === "https://removeduplicates.org/mcp",
+  "API catalog and server card point at the canonical MCP endpoint"
+);
+
+const knownRoutes = new Set(["/", "/excel", "/privacy", "/terms", "/mcp", "/sitemap.xml"]);
+const agentSources = [llmsText, skillMd, apiCatalogRaw, aiCatalogRaw, serverCardRaw, homeMarkdown, excelMarkdown];
+const agentUrls = new Set(
+  agentSources.flatMap((source) =>
+    [...source.matchAll(/https:\/\/removeduplicates\.org(\/[^\s)"`'<>]*)?/g)].map((match) =>
+      (match[1] ?? "/").replace(/[.,;:]+$/, "")
+    )
+  )
+);
+const unresolved = [...agentUrls].filter(
+  (urlPath) => !knownRoutes.has(urlPath) && !existsSync(path.join(root, "public", urlPath))
+);
+check(unresolved.length === 0, `agent files link only to real routes and files${unresolved.length ? `: ${unresolved.join(", ")}` : ""}`);
+
+function schemaFaqOf(html) {
+  const graph = JSON.parse(html.match(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+  return graph
+    .find((item) => item["@type"] === "FAQPage")
+    .mainEntity.map((item) => [item.name, item.acceptedAnswer.text]);
+}
+function markdownFaqOf(markdown) {
+  const faq = markdown.split(/^## FAQ$/m)[1]?.split(/^## /m)[0] ?? "";
+  return [...faq.matchAll(/^### (.+)\n\n(.+)$/gm)].map((match) => [
+    match[1],
+    match[2].replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+  ]);
+}
+for (const [label, html, markdown] of [
+  ["home", index, homeMarkdown],
+  ["Excel", excelIndex, excelMarkdown]
+]) {
+  check(
+    JSON.stringify(markdownFaqOf(markdown)) === JSON.stringify(schemaFaqOf(html)),
+    `${label} Markdown twin mirrors the FAQ structured data exactly`
+  );
+}
+for (const [label, html, markdown] of [
+  ["Privacy", privacy, privacyMarkdown],
+  ["Terms", terms, termsMarkdown]
+]) {
+  const headings = [...html.matchAll(/<h2>(.*?)<\/h2>/g)].map((match) => match[1].replace(/&amp;/g, "&"));
+  const markdownHeadings = [...markdown.matchAll(/^## (.+)$/gm)].map((match) => match[1]);
+  const effective = html.match(/Effective ([A-Z][a-z]+ \d{1,2}, \d{4})/)?.[1];
+  check(
+    JSON.stringify(headings) === JSON.stringify(markdownHeadings) && markdown.includes(`Effective ${effective}`),
+    `${label} Markdown twin carries every section and the current effective date`
+  );
+}
+check(
+  /\/mcp/.test(privacy) && /stor/.test(privacy.split("Optional AI agent endpoint")[1] ?? "") && /\/mcp/.test(terms),
+  "Privacy and Terms disclose the optional MCP endpoint"
+);
+check(
+  /import\("\.\/webmcp\.js\?v=/.test(app) && /modelContext\?\.registerTool/.test(app) && !/from "\.\/webmcp\.js/.test(app),
+  "homepage loads the WebMCP module only when the browser exposes modelContext"
+);
+check(
+  Buffer.byteLength(webMcpModule) + Buffer.byteLength(agentToolModule) <= 12 * 1024,
+  "conditional WebMCP module and shared agent tool stay below 12 KiB raw"
+);
+check(!/\bconsole\s*\./.test(`${mcpSource}\n${agentToolModule}\n${webMcpModule}`), "agent surfaces never log request text");
+// Wrangler reads .assetsignore only from the assets directory; at the project
+// root it is silently ignored and Finder .DS_Store files get published.
+check(
+  existsSync(path.join(root, "public/.assetsignore")) && !existsSync(path.join(root, ".assetsignore")),
+  ".assetsignore lives in the assets directory where Wrangler applies it"
+);
 
 check(wrangler.name === "removeduplicates-org", "Worker name is explicit");
 check(wrangler.main === "src/worker.js", "Worker entry point is explicit");
@@ -709,8 +848,12 @@ for (const file of [
   "public/js/excel-worker.js",
   "public/js/workbook-adapter.js",
   "public/js/xlsx-preflight.js",
+  "public/js/agent-tool.js",
+  "public/js/webmcp.js",
   "public/vendor/sheetjs-0.20.3/xlsx.mjs",
   "src/worker.js",
+  "src/mcp.js",
+  "scripts/build-agent-files.mjs",
   "scripts/openclaw-browser-qa.js",
   "scripts/openclaw-excel-browser-qa.js",
   "scripts/generate-xlsx-fixtures.mjs",

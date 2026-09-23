@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "protocolVersion": "2025-11-25",
+  "serverInfo": {
+    "name": "removeduplicates",
+    "title": "RemoveDuplicates.org",
+    "version": "1.0.0"
+  },
+  "description": "Stateless duplicate removal for text lists and CSV/TSV rows with the removeduplicates.org engine. Text is processed in memory for each call and never stored.",
+  "documentationUrl": "https://removeduplicates.org/llms.txt",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://removeduplicates.org/mcp"
+  },
+  "endpoint": "https://removeduplicates.org/mcp",
+  "authentication": {
+    "required": false,
+    "schemes": []
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  },
+  "tools": [
+    {
+      "name": "remove_duplicates",
+      "title": "Remove duplicates",
+      "description": "Remove duplicate lines from a text list, or duplicate rows from CSV/TSV text such as rows copied from Excel or Google Sheets. Uses the same engine as removeduplicates.org and returns the cleaned text with counts. Stateless: the text is processed in memory for this call only and is never stored."
+    }
+  ]
+}

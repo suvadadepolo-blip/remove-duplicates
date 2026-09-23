@@ -1,0 +1,26 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://removeduplicates.org/mcp",
+      "service-desc": [
+        {
+          "href": "https://removeduplicates.org/.well-known/mcp/server-card.json",
+          "type": "application/json",
+          "title": "MCP server card: stateless remove_duplicates tool over Streamable HTTP, no authentication."
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://removeduplicates.org/.well-known/agent-skills/remove-duplicates/SKILL.md",
+          "type": "text/markdown",
+          "title": "How to call remove_duplicates, its arguments, limits, and when to use the browser tools instead."
+        },
+        {
+          "href": "https://removeduplicates.org/llms.txt",
+          "type": "text/plain",
+          "title": "Route map for language models."
+        }
+      ]
+    }
+  ]
+}

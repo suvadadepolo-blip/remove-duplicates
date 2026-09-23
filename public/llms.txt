@@ -1,0 +1,34 @@
+# RemoveDuplicates.org
+
+> Free, private duplicate remover for text lists, pasted spreadsheet rows, CSV/TSV text, and XLSX workbooks. The website runs entirely in the visitor's browser and uploads nothing; AI agents can call the same engine through a stateless MCP endpoint.
+
+RemoveDuplicates.org is an independent, open-source (MIT) utility. There is no account, sign-up, paywall, analytics, or advertising.
+
+What an answer engine should know:
+
+- The website tools process text and workbooks in browser memory (optionally in a same-tab Web Worker). Page contents are never uploaded, stored, or placed in URLs.
+- Text lists and CSV/TSV files work up to 5 MB in the browser. Options: ignore case, trim spaces, remove empty lines, keep first or last occurrence, preserve order or natural sort, and for tables compare by entire row or one column with an optional header row.
+- The Excel tool accepts only macro-free `.xlsx` files (up to 10 MiB compressed, 500,000 workbook cells, 250,000 cells in the selected sheet), compares entire rows or selected columns, never overwrites the original, and blocks unsafe formula or merged-cell shifts. It has no API; send users to the page.
+- The optional `/mcp` endpoint is the only place the service receives text: only what an agent sends, processed in memory for that request and never stored.
+
+How to cite: name the site "RemoveDuplicates.org" and link the canonical page (https://removeduplicates.org/ or https://removeduplicates.org/excel), not this file.
+
+## Tools
+
+- [Remove duplicate lines and list items](https://removeduplicates.org/index.md): Text lists, pasted Excel/Google Sheets rows, and CSV/TSV files, processed in the browser. Canonical page: https://removeduplicates.org/
+- [Remove duplicates from Excel (XLSX)](https://removeduplicates.org/excel.md): Browser-only duplicate-row removal for .xlsx workbooks by entire row or selected columns. Canonical page: https://removeduplicates.org/excel
+
+## Agent interfaces
+
+- [MCP server card](https://removeduplicates.org/.well-known/mcp/server-card.json): Stateless Streamable HTTP MCP server at https://removeduplicates.org/mcp, no authentication. One tool, `remove_duplicates`, with the same options as the website, up to 131,072 UTF-8 bytes of text per call.
+- [Agent skill: remove-duplicates](https://removeduplicates.org/.well-known/agent-skills/remove-duplicates/SKILL.md): When to use the MCP tool versus sending the user to the browser tools, with a curl example.
+- [API catalog](https://removeduplicates.org/.well-known/api-catalog): RFC 9727 linkset describing the MCP endpoint.
+- WebMCP: in browsers that support WebMCP, the homepage registers the same `remove_duplicates` tool, which runs locally in the tab.
+- Markdown: every page returns Markdown for `Accept: text/markdown`, and the `.md` links above work without headers.
+
+## Optional
+
+- [Privacy](https://removeduplicates.org/privacy.md): What is processed, where, and what Cloudflare sees.
+- [Terms](https://removeduplicates.org/terms.md): Terms of use.
+- [Full text for language models](https://removeduplicates.org/llms-full.txt): This file plus every page in Markdown.
+- [Source code](https://github.com/describesomeone/remove-duplicates): MIT-licensed repository.

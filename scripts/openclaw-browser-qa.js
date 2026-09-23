@@ -516,6 +516,59 @@ async (page) => {
     check(proof.duration < 5_000, `near-limit processing took ${Math.round(proof.duration)} ms`);
   });
 
+  await step("WebMCP tool registers only for agents and runs locally", async () => {
+    check(!requestPayloads.some((value) => value.includes("/js/webmcp.js")), "WebMCP module loaded in a browser without modelContext");
+    const agentPage = await page.context().newPage();
+    const agentRequests = [];
+    agentPage.on("request", (request) => agentRequests.push(`${request.url()}\n${request.postData() || ""}`));
+    agentPage.on("pageerror", (error) => consoleErrors.push(`WebMCP pageerror: ${error.message}`));
+    await agentPage.addInitScript(() => {
+      window.__RDQA_WEBMCP__ = [];
+      Object.defineProperty(navigator, "modelContext", {
+        configurable: true,
+        value: {
+          async registerTool(tool) {
+            window.__RDQA_WEBMCP__.push(tool);
+          }
+        }
+      });
+    });
+    try {
+      const response = await agentPage.goto(`${base}/`, { waitUntil: "networkidle" });
+      check(response && response.status() < 400, `WebMCP homepage returned ${response?.status()}`);
+      await agentPage.waitForFunction(() => window.__RDQA_WEBMCP__.length === 1, null, { timeout: 10_000 });
+      const outcome = await agentPage.evaluate(async (marker) => {
+        const [tool] = window.__RDQA_WEBMCP__;
+        const input = document.querySelector("[data-input]");
+        input.value = "visitor draft";
+        const output = await tool.execute({ text: `${marker}\nb\n${marker}\nB`, ignoreCase: true });
+        let rejected = "";
+        try {
+          await tool.execute({ text: "a", keep: "middle" });
+        } catch (error) {
+          rejected = error.message;
+        }
+        return {
+          name: tool.name,
+          readOnly: tool.annotations?.readOnlyHint,
+          required: tool.inputSchema?.required,
+          parsed: JSON.parse(output),
+          inputUntouched: input.value === "visitor draft",
+          rejected
+        };
+      }, privateMarker);
+      check(outcome.name === "remove_duplicates" && outcome.readOnly === true, `unexpected WebMCP tool ${outcome.name}`);
+      check(JSON.stringify(outcome.required) === '["text"]', "WebMCP tool does not require text");
+      check(outcome.parsed.text === `${privateMarker}\nb` && outcome.parsed.stats.removed === 2, `WebMCP result was ${JSON.stringify(outcome.parsed)}`);
+      check(outcome.inputUntouched, "WebMCP tool changed the visitor's input");
+      check(/keep must be/.test(outcome.rejected), `invalid WebMCP arguments were not rejected: ${outcome.rejected}`);
+      check(agentRequests.some((value) => value.includes("/js/webmcp.js")), "WebMCP module was not requested for an agent browser");
+      check(!agentRequests.some((value) => value.includes(privateMarker)), "WebMCP tool text left the browser");
+    } finally {
+      await agentPage.close();
+    }
+  });
+
   await step("no text upload, third-party origin, or runtime error", async () => {
     check(!requestPayloads.some((value) => value.includes(privateMarker)), "private input marker appeared in an HTTP request");
     check(externalOrigins.size === 0, `external runtime origins: ${[...externalOrigins].join(", ")}`);

@@ -2,7 +2,7 @@ import {
   parseRecords,
   resolveFormat,
   serializeRecords
-} from "./tabular.js?v=20260716.2";
+} from "./tabular.js?v=20260923.1";
 
 export const MAX_TEXT_BYTES = 5 * 1024 * 1024;
 export const WORKER_CHARACTER_THRESHOLD = 64 * 1024;

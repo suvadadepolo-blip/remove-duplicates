@@ -1,3 +1,5 @@
+import { MCP_PATH, handleMcp } from "./mcp.js";
+
 const APEX_HOST = "removeduplicates.org";
 const EXCEL_PATH_PATTERN = /^\/excel\/?$/i;
 const SHEETJS_VENDOR_PATH = "/vendor/sheetjs-0.20.3/xlsx.mjs";
@@ -20,6 +22,45 @@ const ROUTE_ASSETS = new Map([
   ["/privacy", "/privacy/index.html"],
   ["/privacy/", "/privacy/index.html"]
 ]);
+
+// Agent surfaces. Each HTML route has a Markdown twin that is served for
+// `Accept: text/markdown` and is also reachable directly for agents that cannot
+// set headers.
+const MARKDOWN_TYPE = "text/markdown; charset=utf-8";
+const MARKDOWN_TWINS = new Map([
+  ["/", "/index.md"],
+  ["/excel", "/excel.md"],
+  ["/terms", "/terms.md"],
+  ["/terms/", "/terms.md"],
+  ["/privacy", "/privacy.md"],
+  ["/privacy/", "/privacy.md"]
+]);
+const MARKDOWN_CANONICALS = new Map([
+  ["/index.md", "/"],
+  ["/excel.md", "/excel"],
+  ["/terms.md", "/terms"],
+  ["/privacy.md", "/privacy"]
+]);
+const AGENT_FILE_TYPES = new Map([
+  ["/llms.txt", "text/plain; charset=utf-8"],
+  ["/llms-full.txt", "text/plain; charset=utf-8"],
+  ["/.well-known/api-catalog", "application/linkset+json"],
+  ["/.well-known/ai-catalog.json", "application/json"],
+  ["/.well-known/mcp/server-card.json", "application/json"],
+  ["/.well-known/agent-skills/index.json", "application/json"],
+  ["/.well-known/agent-skills/remove-duplicates/SKILL.md", MARKDOWN_TYPE],
+  ...[...MARKDOWN_CANONICALS.keys()].map((path) => [path, MARKDOWN_TYPE])
+]);
+// The llmstxt.org filenames are plural; the singular is a common typo.
+const AGENT_PATH_ALIASES = new Map([
+  ["/llm.txt", "/llms.txt"],
+  ["/llm-full.txt", "/llms-full.txt"]
+]);
+const DISCOVERY_LINKS = [
+  '</.well-known/api-catalog>; rel="api-catalog"',
+  '</llms.txt>; rel="service-doc"; type="text/plain"',
+  '</.well-known/agent-skills/index.json>; rel="describedby"; type="application/json"'
+].join(", ");
 
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
@@ -71,13 +112,44 @@ function redirectLocationFor(source, target) {
   return target.toString();
 }
 
-function withHeaders(response, { hostname, pathname, method, protocol }) {
+// True when the Accept header ranks text/markdown at least as high as HTML.
+// Browsers never list text/markdown, so they keep getting HTML.
+function prefersMarkdown(accept) {
+  if (!accept) return false;
+  const quality = new Map();
+  for (const part of accept.toLowerCase().split(",")) {
+    const [range, ...params] = part.split(";").map((value) => value.trim());
+    const q = params.find((param) => param.startsWith("q="));
+    const value = q ? Number(q.slice(2)) : 1;
+    if (range && Number.isFinite(value)) {
+      quality.set(range, Math.max(quality.get(range) ?? 0, value));
+    }
+  }
+  const markdown = quality.get("text/markdown") ?? 0;
+  const html = quality.get("text/html") ?? quality.get("text/*") ?? quality.get("*/*") ?? 0;
+  return markdown > 0 && markdown >= html;
+}
+
+function withHeaders(response, { hostname, pathname, method, protocol, markdown = false }) {
   const headers = new Headers(response.headers);
+  // A 304 must repeat the Vary/Link the full response would have carried.
+  const served = response.ok || response.status === 304;
+  const markdownTwin = served ? MARKDOWN_TWINS.get(pathname) : undefined;
+  const agentType = served ? AGENT_FILE_TYPES.get(pathname) : undefined;
+
+  if (markdown) {
+    headers.set("Content-Type", MARKDOWN_TYPE);
+  } else if (agentType) {
+    headers.set("Content-Type", agentType);
+  }
   const contentType = headers.get("content-type") || "";
 
   headers.set("Content-Security-Policy", CONTENT_SECURITY_POLICY);
   headers.set("Cross-Origin-Opener-Policy", "same-origin");
-  headers.set("Cross-Origin-Resource-Policy", "same-origin");
+  headers.set(
+    "Cross-Origin-Resource-Policy",
+    agentType || pathname === MCP_PATH ? "cross-origin" : "same-origin"
+  );
   headers.set("Origin-Agent-Cluster", "?1");
   headers.set("Permissions-Policy", "camera=(), geolocation=(), microphone=(), payment=(), usb=()");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -86,6 +158,22 @@ function withHeaders(response, { hostname, pathname, method, protocol }) {
 
   if (protocol === "https:") {
     headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  }
+
+  if (markdownTwin) {
+    headers.append("Vary", "Accept");
+    headers.set(
+      "Link",
+      `${DISCOVERY_LINKS}, <${markdownTwin}>; rel="alternate"; type="text/markdown"`
+    );
+  }
+  if (agentType) {
+    headers.set("Access-Control-Allow-Origin", "*");
+    headers.set("X-Robots-Tag", "noindex, follow");
+    const canonical = MARKDOWN_CANONICALS.get(pathname);
+    if (canonical) {
+      headers.set("Link", `<https://${APEX_HOST}${canonical}>; rel="canonical"`);
+    }
   }
 
   if (
@@ -99,7 +187,7 @@ function withHeaders(response, { hostname, pathname, method, protocol }) {
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
 
-  if (contentType.includes("text/html")) {
+  if (contentType.includes("text/html") || markdown) {
     headers.set("Cache-Control", "public, max-age=0, must-revalidate, no-transform");
   } else if (pathname === SHEETJS_VENDOR_PATH) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
@@ -107,7 +195,7 @@ function withHeaders(response, { hostname, pathname, method, protocol }) {
     headers.set("Cache-Control", "public, max-age=0, must-revalidate");
   } else if (/\.(?:svg|png|ico)$/.test(pathname)) {
     headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");
-  } else if (pathname === "/robots.txt" || pathname === "/sitemap.xml") {
+  } else if (agentType || pathname === "/robots.txt" || pathname === "/sitemap.xml") {
     headers.set("Cache-Control", "public, max-age=3600, must-revalidate");
   }
 
@@ -151,12 +239,33 @@ export default {
       );
     }
 
+    const pathname = url.pathname;
+    const context = {
+      hostname: url.hostname,
+      pathname,
+      method: request.method,
+      protocol: url.protocol
+    };
+
+    if (pathname === MCP_PATH) {
+      return withHeaders(await handleMcp(request), context);
+    }
+
     if (request.method !== "GET" && request.method !== "HEAD") {
       return responseForMethodNotAllowed(url, request.method);
     }
 
-    const pathname = url.pathname;
-    const assetPath = ROUTE_ASSETS.get(pathname);
+    const alias = AGENT_PATH_ALIASES.get(pathname);
+    if (alias) {
+      return withHeaders(
+        new Response(null, { status: 308, headers: { Location: `${alias}${url.search}` } }),
+        context
+      );
+    }
+
+    const markdownTwin = MARKDOWN_TWINS.get(pathname);
+    const markdown = Boolean(markdownTwin) && prefersMarkdown(request.headers.get("accept"));
+    const assetPath = markdown ? markdownTwin : ROUTE_ASSETS.get(pathname);
     const assetRequest = assetPath
       ? new Request(new URL(assetPath, url), request)
       : request;
@@ -173,11 +282,6 @@ export default {
       });
     }
 
-    return withHeaders(response, {
-      hostname: url.hostname,
-      pathname,
-      method: request.method,
-      protocol: url.protocol
-    });
+    return withHeaders(response, { ...context, markdown: markdown && response.status !== 404 });
   }
 };

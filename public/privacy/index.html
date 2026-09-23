@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://removeduplicates.org/privacy">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="stylesheet" href="/styles.css?v=20260716.2">
+    <link rel="stylesheet" href="/styles.css?v=20260923.1">
   </head>
   <body class="legal-page">
     <main class="legal-page-shell" id="main">
@@ -19,7 +19,7 @@
       <article class="legal-copy">
         <p class="eyebrow">Privacy</p>
         <h1>Your text and workbooks stay inside the browser.</h1>
-        <p class="legal-updated">Effective July 16, 2026</p>
+        <p class="legal-updated">Effective September 23, 2026</p>
 
         <h2>Text and files you process</h2>
         <p>Your pasted text, opened text files, and selected XLSX workbooks are read into browser memory. Small text inputs may be processed on the page; larger text and workbook operations may be processed by a Web Worker running inside the same browser tab. That content is not uploaded to RemoveDuplicates.org, sent to Cloudflare as part of a processing request, persisted by the site, or included in the page URL.</p>
@@ -38,6 +38,9 @@
 
         <h2>Cloudflare request data</h2>
         <p>Cloudflare delivers and protects this website. Like other hosting networks, it may process basic HTTP request data such as your IP address, browser and device headers, requested path, timestamps, and security events. This is page-delivery and abuse-prevention data; it does not include the text or workbook contents you process.</p>
+
+        <h2>Optional AI agent endpoint</h2>
+        <p>RemoveDuplicates.org also offers a Model Context Protocol endpoint at <code>/mcp</code> for AI agents and developer tools; the website pages never call it. Text an agent chooses to send there is processed in memory only to return the cleaned result for that single request. The application does not store or log that text, and the endpoint does not accept XLSX workbooks. Cloudflare delivers and protects those requests as described above.</p>
 
         <h2>Retention and your choices</h2>
         <p>RemoveDuplicates.org has no server copy of your text or workbook contents to retain, inspect, or delete. Cloudflare may retain request and security records under its own operational policies. Only process content you are authorized to handle on your device, especially when using a shared or managed computer.</p>

@@ -1,4 +1,39 @@
-User-agent: *
+# Answer engines and AI assistants are welcome to read and cite this site.
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: Claude-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
 Allow: /
 
+# Training crawlers are allowed on purpose.
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: meta-externalagent
+Allow: /
+User-agent: Bytespider
+Allow: /
+
+User-agent: *
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
 Sitemap: https://removeduplicates.org/sitemap.xml
+# LLM guide: https://removeduplicates.org/llms.txt
+# LLM full text: https://removeduplicates.org/llms-full.txt

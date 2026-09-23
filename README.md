@@ -17,10 +17,19 @@ License: MIT
 - [The Excel tool](https://removeduplicates.org/excel) accepts only macro-free `.xlsx` files, compares an entire row or a stable combination of selected columns, and creates the cleaned workbook in a dedicated Module Worker.
 - XLSX package limits are 10 MiB compressed, 2,000 ZIP entries, 100 MiB declared expanded data, 500,000 workbook cells, and 250,000 cells in the selected sheet. Formula row shifts and intersecting merged ranges are blocked.
 - SheetJS CE 0.20.3 is pinned under `public/vendor/sheetjs-0.20.3/` with its official source URLs, license, and SHA-256 receipt. It is lazy-loaded only after a valid XLSX passes local ZIP preflight and is never requested by the homepage.
-- The application does not upload or persist text or workbook contents a user opens.
+- The website does not upload or persist text or workbook contents a user opens. The only server-side processing is the optional `/mcp` endpoint, which handles text an AI agent sends for that one request and stores nothing.
 - No account, database, analytics, advertising, external font, or third-party browser runtime is included.
 - Cloudflare still processes ordinary HTTP metadata needed to deliver and protect the site; the Privacy copy states this boundary directly.
 - Terms and Privacy are real direct pages, enhanced into an in-page dialog when JavaScript is available.
+
+## Agent and answer-engine surfaces
+
+- `robots.txt` names the major AI crawlers and declares `Content-Signal: search=yes, ai-input=yes, ai-train=yes`.
+- `/llms.txt` and `/llms-full.txt` (with `/llm.txt` redirects) describe the site for language models.
+- Every page has a Markdown twin (`/index.md`, `/excel.md`, `/privacy.md`, `/terms.md`), also served for `Accept: text/markdown`. HTML routes send `Vary: Accept` and RFC 8288 `Link` headers for the API catalog, `llms.txt`, the agent-skills index, and the Markdown alternate.
+- `/.well-known/api-catalog` (RFC 9727), `/.well-known/mcp/server-card.json`, `/.well-known/agent-skills/index.json` with `remove-duplicates/SKILL.md`, and `/.well-known/ai-catalog.json`.
+- `/mcp` is a stateless Streamable HTTP MCP server with one tool, `remove_duplicates`, capped at 128 KiB of text per call. The homepage registers the same tool through WebMCP when the browser exposes `navigator.modelContext`; that path runs locally in the tab. Both share `public/js/agent-tool.js` and the site's `dedupe.js` engine.
+- `node scripts/build-agent-files.mjs` regenerates the server card, the skill digest, and `llms-full.txt`; `npm run check` fails when they are stale.
 
 ## Commands
 

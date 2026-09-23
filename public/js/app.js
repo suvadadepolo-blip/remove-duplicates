@@ -4,8 +4,8 @@ import {
   dedupeInteractiveInput,
   measureTextBytes,
   shouldUseWorker
-} from "./dedupe.js?v=20260716.2";
-import { stripBom } from "./tabular.js?v=20260716.2";
+} from "./dedupe.js?v=20260923.1";
+import { stripBom } from "./tabular.js?v=20260923.1";
 
 const input = document.querySelector("[data-input]");
 const output = document.querySelector("[data-output]");
@@ -315,7 +315,7 @@ function handleProcessingError(error, shouldAnnounce = true) {
 
 function ensureWorker() {
   if (processingWorker) return processingWorker;
-  processingWorker = new Worker(new URL("./dedupe-worker.js?v=20260716.2", import.meta.url), {
+  processingWorker = new Worker(new URL("./dedupe-worker.js?v=20260923.1", import.meta.url), {
     type: "module",
     name: "removeduplicates-local"
   });
@@ -728,6 +728,18 @@ if (shortcutHint) shortcutHint.textContent = isApplePlatform ? "⌘ ↵" : "Ctrl
 setMobilePanel("input");
 updateInputMeta();
 renderResult(currentResult, { mode: "main", duration: 0 });
+
+// WebMCP: the draft exposes navigator.modelContext; Chrome's early preview used
+// document.modelContext. The tool module loads only where an agent can use it.
+const modelContext = navigator.modelContext ?? document.modelContext;
+if (
+  typeof modelContext?.registerTool === "function" ||
+  typeof modelContext?.provideContext === "function"
+) {
+  import("./webmcp.js?v=20260923.1")
+    .then(({ registerWebMcpTools }) => registerWebMcpTools(modelContext))
+    .catch(() => {});
+}
 
 window.__REMOVE_DUPLICATES_QA__ = Object.freeze({
   get result() { return currentResult; },

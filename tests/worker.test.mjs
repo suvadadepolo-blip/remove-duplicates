@@ -17,7 +17,14 @@ function mockEnvironment({ missing = [] } = {}) {
     [
       "/vendor/sheetjs-0.20.3/xlsx.mjs",
       ["export const version = '0.20.3';", "text/javascript; charset=utf-8"]
-    ]
+    ],
+    ["/index.md", ["# Remove duplicates from lines and lists", "text/markdown"]],
+    ["/excel.md", ["# Remove duplicates from Excel files online", "text/markdown"]],
+    ["/privacy.md", ["# Privacy", "text/markdown"]],
+    ["/terms.md", ["# Terms", "text/markdown"]],
+    ["/llms.txt", ["# RemoveDuplicates.org", "text/plain"]],
+    ["/.well-known/api-catalog", ['{"linkset":[]}', "application/octet-stream"]],
+    ["/.well-known/mcp/server-card.json", ["{}", "application/json"]]
   ]);
 
   return {
@@ -377,4 +384,155 @@ test("rejects mutation methods on the canonical Excel route with security header
   );
   assert.equal(response.headers.get("x-robots-tag"), null);
   assert.deepEqual(seen, []);
+});
+
+const DISCOVERY_LINK_PREFIX =
+  '</.well-known/api-catalog>; rel="api-catalog", </llms.txt>; rel="service-doc"; type="text/plain", ' +
+  '</.well-known/agent-skills/index.json>; rel="describedby"; type="application/json"';
+
+test("advertises agent discovery links and varies HTML routes on Accept", async () => {
+  const { env, seen } = mockEnvironment();
+  const response = await worker.fetch(
+    new Request("https://removeduplicates.org/", {
+      headers: { Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" }
+    }),
+    env
+  );
+
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("content-type"), /^text\/html/);
+  assert.equal(
+    response.headers.get("link"),
+    `${DISCOVERY_LINK_PREFIX}, </index.md>; rel="alternate"; type="text/markdown"`
+  );
+  assert.equal(response.headers.get("vary"), "Accept");
+  assert.equal(response.headers.get("access-control-allow-origin"), null);
+  assert.deepEqual(seen, ["/index.html"]);
+});
+
+test("negotiates the Markdown twin for agents that prefer text/markdown", async () => {
+  const cases = [
+    ["https://removeduplicates.org/", "text/markdown", "/index.md", null],
+    ["https://removeduplicates.org/excel", "text/markdown, text/html;q=0.9", "/excel.md", null],
+    ["https://removeduplicates.org/privacy", "text/markdown, */*", "/privacy.md", "noindex, nofollow"],
+    ["https://removeduplicates.org/terms/", "text/markdown", "/terms.md", "noindex, nofollow"]
+  ];
+
+  for (const [source, accept, asset, robots] of cases) {
+    const { env, seen } = mockEnvironment();
+    const response = await worker.fetch(new Request(source, { headers: { Accept: accept } }), env);
+
+    assert.equal(response.status, 200, source);
+    assert.equal(response.headers.get("content-type"), "text/markdown; charset=utf-8", source);
+    assert.equal(response.headers.get("vary"), "Accept", source);
+    assert.equal(
+      response.headers.get("cache-control"),
+      "public, max-age=0, must-revalidate, no-transform",
+      source
+    );
+    assert.equal(response.headers.get("x-robots-tag"), robots, source);
+    assert.match(await response.text(), /^# /, source);
+    assert.deepEqual(seen, [asset], source);
+  }
+});
+
+test("keeps HTML when HTML ranks above Markdown or Markdown is refused", async () => {
+  for (const accept of ["text/html, text/markdown;q=0.5", "text/markdown;q=0", "*/*", "text/plain"]) {
+    const { env, seen } = mockEnvironment();
+    const response = await worker.fetch(
+      new Request("https://removeduplicates.org/excel", { headers: { Accept: accept } }),
+      env
+    );
+
+    assert.match(response.headers.get("content-type"), /^text\/html/, accept);
+    assert.deepEqual(seen, ["/excel/index.html"], accept);
+  }
+});
+
+test("serves direct Markdown twins with a canonical link and CORS", async () => {
+  const { env } = mockEnvironment();
+  const response = await worker.fetch(new Request("https://removeduplicates.org/excel.md"), env);
+
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "text/markdown; charset=utf-8");
+  assert.equal(response.headers.get("link"), '<https://removeduplicates.org/excel>; rel="canonical"');
+  assert.equal(response.headers.get("x-robots-tag"), "noindex, follow");
+  assert.equal(response.headers.get("access-control-allow-origin"), "*");
+  assert.equal(response.headers.get("cross-origin-resource-policy"), "cross-origin");
+  assert.equal(response.headers.get("cache-control"), "public, max-age=3600, must-revalidate");
+});
+
+test("serves agent discovery files with explicit types and open CORS", async () => {
+  const cases = [
+    ["/llms.txt", "text/plain; charset=utf-8"],
+    ["/.well-known/api-catalog", "application/linkset+json"],
+    ["/.well-known/mcp/server-card.json", "application/json"]
+  ];
+
+  for (const [path, type] of cases) {
+    const { env } = mockEnvironment();
+    const response = await worker.fetch(new Request(`https://removeduplicates.org${path}`), env);
+
+    assert.equal(response.status, 200, path);
+    assert.equal(response.headers.get("content-type"), type, path);
+    assert.equal(response.headers.get("access-control-allow-origin"), "*", path);
+    assert.equal(response.headers.get("x-robots-tag"), "noindex, follow", path);
+  }
+
+  const { env } = mockEnvironment();
+  const staging = await worker.fetch(
+    new Request("https://removeduplicates-org.whatmyname.workers.dev/llms.txt"),
+    env
+  );
+  assert.equal(staging.headers.get("x-robots-tag"), "noindex, nofollow");
+});
+
+test("does not dress a missing agent file up as a discovery response", async () => {
+  const { env } = mockEnvironment();
+  const response = await worker.fetch(
+    new Request("https://removeduplicates.org/.well-known/ai-catalog.json"),
+    env
+  );
+
+  assert.equal(response.status, 404);
+  assert.match(response.headers.get("content-type"), /^text\/html/);
+  assert.equal(response.headers.get("access-control-allow-origin"), null);
+});
+
+test("redirects the singular llm.txt spellings to the llmstxt.org names", async () => {
+  for (const [source, target] of [
+    ["/llm.txt", "/llms.txt"],
+    ["/llm-full.txt?probe=1", "/llms-full.txt?probe=1"]
+  ]) {
+    const { env, seen } = mockEnvironment();
+    const response = await worker.fetch(new Request(`https://removeduplicates.org${source}`), env);
+
+    assert.equal(response.status, 308, source);
+    assert.equal(response.headers.get("location"), target, source);
+    assert.deepEqual(seen, [], source);
+  }
+});
+
+test("routes /mcp to the MCP handler before the GET/HEAD method gate", async () => {
+  const { env, seen } = mockEnvironment();
+  const response = await worker.fetch(
+    new Request("https://removeduplicates.org/mcp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" })
+    }),
+    env
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { jsonrpc: "2.0", id: 1, result: {} });
+  assert.equal(response.headers.get("access-control-allow-origin"), "*");
+  assert.equal(response.headers.get("cross-origin-resource-policy"), "cross-origin");
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.deepEqual(seen, []);
+
+  const get = await worker.fetch(new Request("https://removeduplicates.org/mcp"), env);
+  assert.equal(get.status, 405);
+  assert.equal(get.headers.get("allow"), "POST, OPTIONS");
 });

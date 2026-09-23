@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "remove-duplicates",
+      "type": "skill-md",
+      "description": "Remove duplicate lines from a list, or duplicate rows from CSV/TSV text, with the removeduplicates.org engine over MCP; send users with .xlsx workbooks or large files to the private browser tools.",
+      "url": "/.well-known/agent-skills/remove-duplicates/SKILL.md",
+      "digest": "sha256:975ce9288b42ddfabc37037618829f42c1f79db7689e3bb9de39c4f11bff9a43"
+    }
+  ]
+}
