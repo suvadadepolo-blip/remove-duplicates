@@ -58,4 +58,4 @@ Encrypted workbooks cannot be read safely in this local tool, and macro-enabled 
 
 - [Remove duplicate lines from text lists and CSV](https://removeduplicates.org/)
 - [Privacy](https://removeduplicates.org/privacy)
-- [Source code (MIT)](https://github.com/describesomeone/remove-duplicates)
+- [Source code (MIT)](https://github.com/suvadadepolo-blip/remove-duplicates)

@@ -69,4 +69,4 @@ Yes. Drop a CSV file up to 5 MB. Quoted fields, embedded commas, and embedded ne
 
 - [Remove duplicates from Excel (XLSX)](https://removeduplicates.org/excel)
 - [For AI agents: MCP endpoint and route map](https://removeduplicates.org/llms.txt)
-- [Source code (MIT)](https://github.com/describesomeone/remove-duplicates)
+- [Source code (MIT)](https://github.com/suvadadepolo-blip/remove-duplicates)

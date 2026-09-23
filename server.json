@@ -3,10 +3,10 @@
   "name": "org.removeduplicates/remove-duplicates",
   "title": "RemoveDuplicates.org",
   "description": "Remove duplicate lines or CSV/TSV rows from text. Stateless: processed per call, never stored.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://removeduplicates.org/",
   "repository": {
-    "url": "https://github.com/describesomeone/remove-duplicates",
+    "url": "https://github.com/suvadadepolo-blip/remove-duplicates",
     "source": "github"
   },
   "icons": [

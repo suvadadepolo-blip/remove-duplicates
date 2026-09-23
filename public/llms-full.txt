@@ -31,7 +31,7 @@ How to cite: name the site "RemoveDuplicates.org" and link the canonical page (h
 - [Privacy](https://removeduplicates.org/privacy.md): What is processed, where, and what Cloudflare sees.
 - [Terms](https://removeduplicates.org/terms.md): Terms of use.
 - [Full text for language models](https://removeduplicates.org/llms-full.txt): This file plus every page in Markdown.
-- [Source code](https://github.com/describesomeone/remove-duplicates): MIT-licensed repository.
+- [Source code](https://github.com/suvadadepolo-blip/remove-duplicates): MIT-licensed repository.
 
 ---
 
@@ -106,7 +106,7 @@ Yes. Drop a CSV file up to 5 MB. Quoted fields, embedded commas, and embedded ne
 
 - [Remove duplicates from Excel (XLSX)](https://removeduplicates.org/excel)
 - [For AI agents: MCP endpoint and route map](https://removeduplicates.org/llms.txt)
-- [Source code (MIT)](https://github.com/describesomeone/remove-duplicates)
+- [Source code (MIT)](https://github.com/suvadadepolo-blip/remove-duplicates)
 
 ---
 
@@ -170,7 +170,7 @@ Encrypted workbooks cannot be read safely in this local tool, and macro-enabled 
 
 - [Remove duplicate lines from text lists and CSV](https://removeduplicates.org/)
 - [Privacy](https://removeduplicates.org/privacy)
-- [Source code (MIT)](https://github.com/describesomeone/remove-duplicates)
+- [Source code (MIT)](https://github.com/suvadadepolo-blip/remove-duplicates)
 
 ---
 

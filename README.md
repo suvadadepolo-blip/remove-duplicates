@@ -6,7 +6,7 @@ Links:
 
 - Website: [RemoveDuplicates.org](https://removeduplicates.org/)
 - Excel tool: [Remove duplicates from Excel online](https://removeduplicates.org/excel)
-- Source code: [describesomeone/remove-duplicates](https://github.com/describesomeone/remove-duplicates)
+- Source code: [suvadadepolo-blip/remove-duplicates](https://github.com/suvadadepolo-blip/remove-duplicates)
 
 License: MIT
 
