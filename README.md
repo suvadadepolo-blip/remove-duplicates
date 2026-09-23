@@ -10,6 +10,40 @@ Links:
 
 License: MIT
 
+## Use it from an AI agent (MCP)
+
+A hosted MCP server is available at `https://removeduplicates.org/mcp` (Streamable HTTP). There is nothing to install and no API key or account. It is listed in the Official MCP Registry as `org.removeduplicates/remove-duplicates`.
+
+Claude Code:
+
+    claude mcp add --transport http removeduplicates https://removeduplicates.org/mcp
+
+Cline (`cline_mcp_settings.json`):
+
+    {
+      "mcpServers": {
+        "removeduplicates": {
+          "type": "streamableHttp",
+          "url": "https://removeduplicates.org/mcp"
+        }
+      }
+    }
+
+Cursor (`mcp.json`) takes the same `mcpServers` entry without `type`. VS Code (`.vscode/mcp.json`):
+
+    {
+      "servers": {
+        "removeduplicates": {
+          "type": "http",
+          "url": "https://removeduplicates.org/mcp"
+        }
+      }
+    }
+
+Clients that only speak stdio can bridge with `npx mcp-remote https://removeduplicates.org/mcp`.
+
+The server has one read-only tool, `remove_duplicates`. It takes `text` (up to 128 KiB) plus optional `format` (`auto`, `lines`, `table`), `ignoreCase`, `trim`, `removeEmpty`, `keep` (`first`, `last`), `order` (`preserve`, `sort`), `compare` (`row`, a column index, or a list of indices) and `header`, and returns the cleaned text with counts. Each call is processed in memory and nothing is stored. For `.xlsx` workbooks, use [the Excel tool](https://removeduplicates.org/excel), which runs only in the browser.
+
 ## Product boundary
 
 - Line and table-aware deduplication runs in browser memory; larger inputs are streamed to a same-origin Web Worker in responsive chunks.
