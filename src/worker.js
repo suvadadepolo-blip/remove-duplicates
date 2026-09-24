@@ -49,6 +49,8 @@ const AGENT_FILE_TYPES = new Map([
   ["/.well-known/mcp/server-card.json", "application/json"],
   // Official MCP Registry HTTP namespace proof for org.removeduplicates/*.
   ["/.well-known/mcp-registry-auth", "text/plain; charset=utf-8"],
+  // mcpi.app directory ownership proof for the /mcp listing.
+  ["/.well-known/mcpi-verify", "text/plain; charset=utf-8"],
   ["/.well-known/agent-skills/index.json", "application/json"],
   ["/.well-known/agent-skills/remove-duplicates/SKILL.md", MARKDOWN_TYPE],
   ...[...MARKDOWN_CANONICALS.keys()].map((path) => [path, MARKDOWN_TYPE])
