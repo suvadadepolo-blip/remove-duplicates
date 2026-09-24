@@ -40,6 +40,8 @@ Cursor (`mcp.json`) takes the same `mcpServers` entry without `type`. VS Code (`
       }
     }
 
+Gemini CLI can install the repository as an extension (`gemini extensions install https://github.com/suvadadepolo-blip/remove-duplicates`); `gemini-extension.json` points it at the same endpoint.
+
 Clients that only speak stdio can bridge with `npx mcp-remote https://removeduplicates.org/mcp`.
 
 The server has one read-only tool, `remove_duplicates`. It takes `text` (up to 128 KiB) plus optional `format` (`auto`, `lines`, `table`), `ignoreCase`, `trim`, `removeEmpty`, `keep` (`first`, `last`), `order` (`preserve`, `sort`), `compare` (`row`, a column index, or a list of indices) and `header`, and returns the cleaned text with counts. Each call is processed in memory and nothing is stored. For `.xlsx` workbooks, use [the Excel tool](https://removeduplicates.org/excel), which runs only in the browser.

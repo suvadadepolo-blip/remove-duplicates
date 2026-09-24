@@ -1,0 +1,10 @@
+{
+  "name": "removeduplicates",
+  "version": "1.0.1",
+  "description": "Remove duplicate lines or CSV/TSV rows with the free hosted RemoveDuplicates.org MCP server. No API key; text is never stored.",
+  "mcpServers": {
+    "removeduplicates": {
+      "httpUrl": "https://removeduplicates.org/mcp"
+    }
+  }
+}
