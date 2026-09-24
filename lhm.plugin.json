@@ -1,0 +1,20 @@
+{
+  "identifier": "suvadadepolo-blip-remove-duplicates",
+  "name": "RemoveDuplicates.org",
+  "version": "1.0.1",
+  "description": "Remove duplicate lines from a text list, or duplicate rows from CSV/TSV text such as rows copied from Excel or Google Sheets, and get the cleaned text back with counts. Free hosted Streamable HTTP server, no API key; text is processed in memory for each call and never stored.",
+  "author": "RemoveDuplicates.org",
+  "authorUrl": "https://github.com/suvadadepolo-blip",
+  "homepage": "https://github.com/suvadadepolo-blip/remove-duplicates",
+  "cloudEndpoint": "https://removeduplicates.org/mcp",
+  "icon": "https://removeduplicates.org/icon-512.png",
+  "category": "productivity",
+  "tags": ["deduplicate", "remove duplicates", "csv", "text", "excel", "data cleaning"],
+  "localizations": [
+    {
+      "locale": "zh-CN",
+      "name": "RemoveDuplicates.org 去重",
+      "description": "删除文本列表中的重复行，或 CSV/TSV 文本（如从 Excel、Google 表格复制的行）中的重复行，返回去重结果和统计。免费托管的 Streamable HTTP 服务器，无需 API Key，输入只在单次调用的内存中处理，不存储。"
+    }
+  ]
+}
